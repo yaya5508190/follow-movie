@@ -9,12 +9,19 @@
 	<description>一个电影订阅助手</description>
 	<packaging>pom</packaging>
 
+	<properties>
+		<java.version>17</java.version>
+		<spring-boot.version>3.5.5</spring-boot.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>3.5.5</version>
+				<version>${spring-boot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -23,6 +30,6 @@
 
 	<modules>
 		<module>follow-movie-web</module>
-		<module>plugins/media-hub</module>
+		<module>plugins</module>
 	</modules>
 </project>
