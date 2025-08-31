@@ -1,8 +1,15 @@
 <script setup lang="ts">
 const tab = ref(null)
+const movieInfos = ref([])
+
+axiosInstance.get("/api/movieRank/").then((res) => {
+  movieInfos.value = JSON.parse(res.data.parsed[0].data).items
+  console.log(movieInfos.value)
+})
 </script>
 
 <template>
+  <meta name="referrer" content="no-referrer">
   <v-card style="height: calc(100vh - 68px); overflow-y: auto;">
     <v-tabs
       v-model="tab"
@@ -23,7 +30,7 @@ const tab = ref(null)
         <v-container fluid>
           <v-row>
             <v-col
-              v-for="i in 50"
+              v-for="(movieInfo, i) in movieInfos"
               :key="i"
               cols="4"
               xl="1"
@@ -32,10 +39,9 @@ const tab = ref(null)
               sm="3"
             >
               <v-img
-                :lazy-src="`https://picsum.photos/10/6?image=${i * n * 5 + 10}`"
-                :src="`https://picsum.photos/500/300?image=${i * n * 5 + 10}`"
-                width="200"
-                height="305"
+                :lazy-src="movieInfo.pic.normal"
+                :src="movieInfo.pic.normal"
+                :height="300"
                 cover
               ></v-img>
             </v-col>

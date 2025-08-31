@@ -22,6 +22,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.yx</groupId>
+            <artifactId>x-spider-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- 自动生成 ServiceLoader 配置文件的插件 -->
         <dependency>
             <groupId>com.google.auto.service</groupId>
