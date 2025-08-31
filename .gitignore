@@ -3,12 +3,10 @@ target/
 .mvn/**
 !**/src/main/**/target/
 !**/src/test/**/target/
-!**/src/main/**/static/
-!**/src/test/**/static/
 *.class
 node_modules
 dist/
-
+static/
 
 ### STS ###
 .apt_generated
