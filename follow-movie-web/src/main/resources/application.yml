@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: plugin-loader
+plugin:
+  path: C:\develop\x-project\follow-movie\plugins\media-hub\target
+  scan: true
+  context-path: /
+logging:
+  level:
+    root: info
+server:
+  servlet:
+    context-path: /
