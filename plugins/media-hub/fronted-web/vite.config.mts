@@ -98,6 +98,8 @@ export default defineConfig({
   base: '/',
   build: {
     target: 'esnext' ,
+    // minify: false,
+    // sourcemap: true,
     outDir: 'dist',
     assetsDir: '',   // 👈 静态资源直接输出在 dist 根目录
   },

@@ -40,9 +40,14 @@ async function main() {
     if (/\.(html|js|css|json|map)$/.test(file)) {
       let txt = await fsp.readFile(file, 'utf8')
       if (txt.includes(target)) {
-        const replaced = txt.replaceAll(target, replacement)
-        await fsp.writeFile(file, replaced, 'utf8')
-        console.log('✳️ 已处理:', path.relative(distDir, file))
+        //base为/则不做任何操作
+        if(base !== '/') {
+          const replaced = txt.replaceAll(target, replacement)
+          await fsp.writeFile(file, replaced, 'utf8')
+          console.log('✳️ 已处理:', path.relative(distDir, file))
+        }else{
+          console.log(`🔍 替换规则: base为 / 不做任何操作`)
+        }
       }
     }
   })
