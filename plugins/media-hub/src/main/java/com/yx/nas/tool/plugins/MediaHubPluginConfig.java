@@ -7,7 +7,7 @@ import com.google.auto.service.AutoService;
 public class MediaHubPluginConfig implements PluginConfig {
     @Override
     public String name() {
-        return "影片推荐";
+        return "热门影片";
     }
 
     @Override
@@ -17,7 +17,7 @@ public class MediaHubPluginConfig implements PluginConfig {
 
     @Override
     public String desc() {
-        return "影片推荐,支持数据源横向扩展";
+        return "热门影片推荐";
     }
 
     @Override
