@@ -28,6 +28,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- 自动生成 ServiceLoader 配置文件的插件 -->
         <dependency>
             <groupId>com.google.auto.service</groupId>
