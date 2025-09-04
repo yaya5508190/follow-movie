@@ -1,30 +1,42 @@
 <script setup lang="ts">
 const tab = ref(null)
 const movieInfos = ref([])
+const categories = ref(['热门','最新','豆瓣高分','冷门佳片'])
 let pageNum = 1
 const pageSize = 60
-let total =-1;
+let total = -1;
 
-async function fetchMovie () {
-  return axiosInstance.get("/api/movieRank/",{
+async function fetchMovie() {
+  return axiosInstance.get("/api/movieRank/", {
     params: {
       pageNum: pageNum,
-      pageSize: pageSize
+      pageSize: pageSize,
+      category: tab.value,
     }
   })
 }
-async function loadMovie ({ done }) {
-  if(total > 0) {
+
+async function loadMovie({done}) {
+  if (total > 0) {
     if ((pageNum * pageSize) - total > pageSize) {
       done('empty')
       return
     }
+  } else if (total === 0) {
+    done('empty')
+    return
   }
   const res = await fetchMovie()
   movieInfos.value.push(...res.data.records)
   total = res.data.total
   pageNum++
   done('ok')
+}
+
+function changeTab(){
+  movieInfos.value = []
+  total = -1;
+  pageNum = 1
 }
 </script>
 
@@ -34,40 +46,18 @@ async function loadMovie ({ done }) {
     <v-tabs
       v-model="tab"
       align-tabs="start"
+      @click="changeTab"
     >
-      <v-tab :value="1">热门电影</v-tab>
-      <v-tab :value="2">最新电影</v-tab>
-      <v-tab :value="3">豆瓣高分</v-tab>
-      <v-tab :value="4">冷门佳片</v-tab>
+      <v-tab v-for=" (category, n) in categories" :value="category" :key="n">{{ category }}</v-tab>
     </v-tabs>
 
     <v-tabs-window v-model="tab" style="height: calc(100vh - 68px - 48px);overflow-y: auto">
       <v-tabs-window-item
-        v-for="n in 4"
+        v-for=" (category, n) in categories"
+        :value="category"
         :key="n"
-        :value="n"
       >
-<!--        <v-container fluid>-->
-<!--          <v-row>-->
-<!--            <v-col-->
-<!--              v-for="(movieInfo, i) in movieInfos"-->
-<!--              :key="i"-->
-<!--              cols="4"-->
-<!--              xl="1"-->
-<!--              lg="2"-->
-<!--              md="2"-->
-<!--              sm="3"-->
-<!--            >-->
-<!--              <v-img-->
-<!--                :lazy-src="movieInfo.coverPic"-->
-<!--                :src="movieInfo.coverPic"-->
-<!--                :height="300"-->
-<!--                cover-->
-<!--              ></v-img>-->
-<!--            </v-col>-->
-<!--          </v-row>-->
-<!--        </v-container>-->
-        <v-infinite-scroll :items="movieInfos" @load="loadMovie">
+        <v-infinite-scroll :key="n" :items="movieInfos" @load="loadMovie">
           <v-container fluid>
             <v-row>
               <v-col
@@ -89,6 +79,7 @@ async function loadMovie ({ done }) {
             </v-row>
           </v-container>
         </v-infinite-scroll>
+
       </v-tabs-window-item>
     </v-tabs-window>
   </v-card>

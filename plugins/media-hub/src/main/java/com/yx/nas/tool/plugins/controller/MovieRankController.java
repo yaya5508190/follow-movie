@@ -3,6 +3,7 @@ package com.yx.nas.tool.plugins.controller;
 import com.yx.nas.tool.plugins.model.common.PageRequest;
 import com.yx.nas.tool.plugins.model.common.PageResult;
 import com.yx.nas.tool.plugins.model.movie.Movie;
+import com.yx.nas.tool.plugins.model.vo.MovieRankPageReqVo;
 import com.yx.nas.tool.plugins.service.impl.DouBanMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class MovieRankController {
     private DouBanMovieService doubanMovieService;
 
     @GetMapping("/")
-    public ResponseEntity<PageResult<Movie>> list(PageRequest page) throws Exception {
-        return ResponseEntity.ok(doubanMovieService.fetchMoviePageList(page));
+    public ResponseEntity<PageResult<Movie>> list(MovieRankPageReqVo movieRankPageReqVo) throws Exception {
+        return ResponseEntity.ok(doubanMovieService.fetchMoviePageList(movieRankPageReqVo));
     }
 }

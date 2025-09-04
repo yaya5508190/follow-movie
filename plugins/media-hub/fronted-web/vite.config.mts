@@ -94,8 +94,8 @@ export default defineConfig({
       },
     },
   },
-  base: '/9d220be1-8f62-4819-8f00-03911dc00a95/',
-  // base: '/',
+  // base: '/9d220be1-8f62-4819-8f00-03911dc00a95/',
+  base: '/',
   build: {
     target: 'esnext' ,
     // minify: false,

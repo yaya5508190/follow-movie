@@ -6,9 +6,9 @@ import com.yx.framework.spider.core.JsonParserEngine;
 import com.yx.framework.spider.fetch.Fetcher;
 import com.yx.framework.spider.model.Page;
 import com.yx.framework.spider.model.SpiderRequest;
-import com.yx.nas.tool.plugins.model.common.PageRequest;
 import com.yx.nas.tool.plugins.model.common.PageResult;
 import com.yx.nas.tool.plugins.model.movie.Movie;
+import com.yx.nas.tool.plugins.model.vo.MovieRankPageReqVo;
 import com.yx.nas.tool.plugins.service.MovieService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -45,8 +45,8 @@ public class DouBanMovieService implements MovieService {
     }
 
     @Override
-    public PageResult<Movie> fetchMoviePageList(PageRequest page) throws Exception {
-        String url = "https://m.douban.com/rexxar/api/v2/subject/recent_hot/movie?start=" + page.getStartNum() + "&limit=" + page.getPageSize() + "&category=热门&type=全部";
+    public PageResult<Movie> fetchMoviePageList(MovieRankPageReqVo movieRankPageReqVo) throws Exception {
+        String url = "https://m.douban.com/rexxar/api/v2/subject/recent_hot/movie?start=" + movieRankPageReqVo.getStartNum() + "&limit=" + movieRankPageReqVo.getPageSize() + "&category=" + movieRankPageReqVo.getCategory() + "&type=全部";
         Page fetchPage = fetcher.fetch(SpiderRequest.get(url, headers));
         String context = Optional.ofNullable(fetchPage.contentType()).orElse("").toLowerCase();
 
@@ -58,8 +58,8 @@ public class DouBanMovieService implements MovieService {
         PageResult<Movie> pageResult = new PageResult<>();
         pageResult.setRecords((List<Movie>) parseData.get("data"));
         pageResult.setTotal((Integer) parseData.get("total"));
-        pageResult.setPageNum(page.getPageNum());
-        pageResult.setPageSize(page.getPageSize());
+        pageResult.setPageNum(movieRankPageReqVo.getPageNum());
+        pageResult.setPageSize(movieRankPageReqVo.getPageSize());
         return pageResult;
     }
 }
