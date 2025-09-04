@@ -1,6 +1,8 @@
 package com.yx.nas.tool.plugins.service.impl;
 
-import com.yx.framework.spider.core.ParserEngine;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yx.framework.spider.core.JsonParserEngine;
 import com.yx.framework.spider.fetch.Fetcher;
 import com.yx.framework.spider.model.Page;
 import com.yx.framework.spider.model.SpiderRequest;
@@ -8,15 +10,18 @@ import com.yx.nas.tool.plugins.model.common.PageRequest;
 import com.yx.nas.tool.plugins.model.common.PageResult;
 import com.yx.nas.tool.plugins.model.movie.Movie;
 import com.yx.nas.tool.plugins.service.MovieService;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Service
 public class DouBanMovieService implements MovieService {
 
     private final Fetcher fetcher;
-    private final ParserEngine parserEngine;
+    private final JsonParserEngine parserEngine;
     private final Map<String, String> headers = Map.ofEntries(
             Map.entry("accept", "application/json, text/plain, */*"),
             Map.entry("accept-language", "zh-CN,zh;q=0.9"),
@@ -34,16 +39,9 @@ public class DouBanMovieService implements MovieService {
             Map.entry("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36")
     );
 
-    public DouBanMovieService(Fetcher fetcher, ParserEngine parserEngine) {
+    public DouBanMovieService(Fetcher fetcher, JsonParserEngine parserEngine) {
         this.fetcher = fetcher;
         this.parserEngine = parserEngine;
-    }
-
-    public Map<String, Object> getMovieList() throws Exception {
-        String url = "https://m.douban.com/rexxar/api/v2/subject/recent_hot/movie?start=0&limit=60&category=热门&type=全部";
-        Page page = fetcher.fetch(SpiderRequest.get(url, headers));
-        String context = Optional.ofNullable(page.contentType()).orElse("").toLowerCase();
-        return parserEngine.parse(page, url, context);
     }
 
     @Override
@@ -51,7 +49,12 @@ public class DouBanMovieService implements MovieService {
         String url = "https://m.douban.com/rexxar/api/v2/subject/recent_hot/movie?start=" + page.getStartNum() + "&limit=" + page.getPageSize() + "&category=热门&type=全部";
         Page fetchPage = fetcher.fetch(SpiderRequest.get(url, headers));
         String context = Optional.ofNullable(fetchPage.contentType()).orElse("").toLowerCase();
-        Map<String,Object> parseData = parserEngine.parse(fetchPage, url, context);
+
+        Document doc = Jsoup.parse(new String(fetchPage.body(), StandardCharsets.UTF_8), fetchPage.request().url());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(doc.body().text());
+
+        Map<String,Object> parseData = parserEngine.parse(node, url, context);
         PageResult<Movie> pageResult = new PageResult<>();
         pageResult.setRecords((List<Movie>) parseData.get("data"));
         pageResult.setTotal((Integer) parseData.get("total"));
