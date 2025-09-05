@@ -31,7 +31,7 @@ public class DouBanMovieParser implements JsonBodyParser<Movie> {
         for(JsonNode item : items) {
             movie = new Movie();
             movie.setTitle(item.get("title").asText());
-            movie.setUri(item.get("uri").asText());
+            movie.setUri(item.get("uri").asText().replaceAll("douban://douban.com/movie/","https://movie.douban.com/subject/"));
             movie.setRating(item.get("rating").get("value").asDouble());
             movie.setCoverPic(item.get("pic").get("normal").asText());
             movie.setDesc(item.get("card_subtitle").asText());

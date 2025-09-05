@@ -50,9 +50,8 @@ function changeTab() {
     <v-tabs
       v-model="tab"
       align-tabs="start"
-      @click="changeTab"
     >
-      <v-tab v-for=" (category, n) in categories" :value="category" :key="n">{{ category }}</v-tab>
+      <v-tab v-for=" (category, n) in categories" :value="category" :key="n" @click="changeTab">{{ category }}</v-tab>
     </v-tabs>
 
     <v-tabs-window v-model="tab" style="height: calc(100vh - 68px - 48px);overflow-y: auto">
@@ -73,12 +72,13 @@ function changeTab() {
                 md="2"
                 sm="3"
               >
-                <v-img
-                  :lazy-src="movieInfo.coverPic"
-                  :src="movieInfo.coverPic"
-                  :height="300"
-                  cover
-                ></v-img>
+                <MovieCard
+                  :image-url="movieInfo.coverPic"
+                  :name="movieInfo.title"
+                  :rating="movieInfo.rating"
+                  :description="movieInfo.desc"
+                  :uri="movieInfo.uri"
+                />
               </v-col>
             </v-row>
           </v-container>
