@@ -2,6 +2,7 @@
 import type {InfiniteScrollStatus} from "@/types/vuetify";
 import type {MovieInfo, MovieRankRsp} from "@/types/movie-rank";
 import type {AxiosResponse} from "axios";
+import {watch} from "vue";
 
 const tab = ref(null)
 const movieInfos: Ref<MovieInfo[]> = ref([])
@@ -42,6 +43,10 @@ function changeTab() {
   total = -1;
   pageNum = 1
 }
+
+watch(tab, () => {
+  changeTab()
+})
 </script>
 
 <template>
@@ -51,7 +56,7 @@ function changeTab() {
       v-model="tab"
       align-tabs="start"
     >
-      <v-tab v-for=" (category, n) in categories" :value="category" :key="n" @click="changeTab">{{ category }}</v-tab>
+      <v-tab v-for=" (category, n) in categories" :value="category" :key="n">{{ category }}</v-tab>
     </v-tabs>
 
     <v-tabs-window v-model="tab" style="height: calc(100vh - 68px - 48px);overflow-y: auto">
@@ -61,6 +66,14 @@ function changeTab() {
         :key="n"
       >
         <v-infinite-scroll :key="n" :items="movieInfos" @load="loadMovie">
+          <template #empty>
+            <div class="pa-8 text-center text-disabled">
+              <p>
+                <v-icon icon="mdi-emoticon-sad-outline" size="large"></v-icon>
+              </p>
+              <p>已经到底部啦~</p>
+            </div>
+          </template>
           <v-container fluid>
             <v-row>
               <v-col
