@@ -1,13 +1,17 @@
 <script setup lang="ts">
+import type {InfiniteScrollStatus} from "@/types/vuetify";
+import type {MovieInfo, MovieRankRsp} from "@/types/movie-rank";
+import type {AxiosResponse} from "axios";
+
 const tab = ref(null)
-const movieInfos = ref([])
-const categories = ref(['热门','最新','豆瓣高分','冷门佳片'])
+const movieInfos: Ref<MovieInfo[]> = ref([])
+const categories = ref(['热门', '最新', '豆瓣高分', '冷门佳片'])
 let pageNum = 1
 const pageSize = 60
 let total = -1;
 
-async function fetchMovie() {
-  return axiosInstance.get("/api/movieRank/", {
+async function fetchMovie(): Promise<AxiosResponse<MovieRankRsp>> {
+  return axiosInstance.get<MovieRankRsp>("/api/movieRank/", {
     params: {
       pageNum: pageNum,
       pageSize: pageSize,
@@ -16,7 +20,7 @@ async function fetchMovie() {
   })
 }
 
-async function loadMovie({done}) {
+async function loadMovie({done}: { done: (status: InfiniteScrollStatus) => void; }) {
   if (total > 0) {
     if ((pageNum * pageSize) - total > pageSize) {
       done('empty')
@@ -33,7 +37,7 @@ async function loadMovie({done}) {
   done('ok')
 }
 
-function changeTab(){
+function changeTab() {
   movieInfos.value = []
   total = -1;
   pageNum = 1

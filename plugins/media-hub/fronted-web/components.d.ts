@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    MovieRank: typeof import('./src/components/MovieRank.vue')['default']
+    MovieCard: typeof import('./src/components/MovieCard.vue')['default']
+    MovieRank: typeof import('./src/pages/MovieRank.vue')['default']
   }
 }

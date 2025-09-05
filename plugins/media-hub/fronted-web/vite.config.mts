@@ -18,7 +18,12 @@ export default defineConfig({
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify(),
-    Components(),
+    Components({
+      // 默认是 ['src/components']，这里加上你新的目录
+      dirs: ['src/components', 'src/pages'],
+      extensions: ['vue'], // 需要的话可加 'tsx'
+      deep: true,          // 递归子目录
+    }),
     AutoImport({
       imports: [
         'vue',
