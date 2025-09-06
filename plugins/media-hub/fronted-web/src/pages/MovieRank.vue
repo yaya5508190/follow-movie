@@ -14,6 +14,12 @@ const movieDataCache = ref<MovieCache>({
 
 const pageSize = 60
 
+const infiniteScrollRef = useTemplateRef('scroll')
+function resetInfiniteScroll () {
+  infiniteScrollRef.value?.["0"].reset()
+
+}
+
 async function fetchMovie(): Promise<AxiosResponse<MovieRankRsp>> {
   return axiosInstance.get<MovieRankRsp>("/api/movieRank/", {
     params: {
@@ -25,27 +31,28 @@ async function fetchMovie(): Promise<AxiosResponse<MovieRankRsp>> {
 }
 
 async function loadMovie({done}: { done: (status: InfiniteScrollStatus) => void; }) {
-  const total = movieDataCache.value[currentTab.value].total;
-  const pageNum = movieDataCache.value[currentTab.value].pageNum
-
-  if (total > 0) {
-    if ((pageNum * pageSize) - total > pageSize) {
-      done('empty')
-      return
-    }
-  } else if (total === 0) {
-    done('empty')
-    return
-  }
   const res = await fetchMovie()
   movieDataCache.value[currentTab.value].records.push(...res.data.records)
   movieDataCache.value[currentTab.value].total = res.data.total
+
+  const pageNum = movieDataCache.value[currentTab.value].pageNum
+  const total = movieDataCache.value[currentTab.value].total;
+
+  if (total > 0) {
+    if ((pageNum * pageSize) > total) {
+      done('empty')
+      return
+    }
+  }
+
   movieDataCache.value[currentTab.value].pageNum ++
+
   done('ok')
 }
 
 function changeTab() {
   movieDataCache.value[currentTab.value].records = []
+  resetInfiniteScroll()
   movieDataCache.value[currentTab.value].total = -1
   movieDataCache.value[currentTab.value].pageNum = 1
 }
@@ -69,8 +76,8 @@ function changeTab() {
         :value="category"
         :key="n"
       >
-        <v-infinite-scroll :key="n" :items="movieDataCache[category].records" @load="loadMovie">
-          <template #empty>
+        <v-infinite-scroll v-if="currentTab === category" ref="scroll" :key="n" :items="movieDataCache[category].records" @load="loadMovie">
+          <template v-if="movieDataCache[category].total != -1" #empty>
             <div class="pa-8 text-center text-disabled">
               <p>
                 <v-icon icon="mdi-emoticon-sad-outline" size="large"></v-icon>
