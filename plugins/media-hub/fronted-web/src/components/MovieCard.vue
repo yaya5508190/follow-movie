@@ -29,12 +29,6 @@
 
           <!-- This div will contain all text content for positioning -->
           <div v-if="isHovering" class="pa-4 text-white text-with-shadow">
-              <v-card-title class="pa-0 pb-1">{{ name }}</v-card-title>
-              <v-card-subtitle class="pa-0 d-flex align-center">
-                <v-icon color="amber" icon="mdi-star" size="small" class="mr-1"></v-icon>
-                <span>{{ rating }}</span>
-              </v-card-subtitle>
-
               <div :class="['description-container', { 'is-hovering': isHovering }]">
                 <!-- pt-2 has been removed from here -->
                 <p class="pa-0 ma-0 description-text">
