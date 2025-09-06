@@ -1,27 +1,33 @@
 <script setup lang="ts">
 import type {InfiniteScrollStatus} from "@/types/vuetify";
-import type {MovieInfo, MovieRankRsp} from "@/types/movie-rank";
+import type {MovieCache, MovieInfo, MovieRankRsp} from "@/types/movie-rank";
 import type {AxiosResponse} from "axios";
-import {watch} from "vue";
 
-const tab = ref(null)
-const movieInfos: Ref<MovieInfo[]> = ref([])
+const currentTab = ref("热门")
 const categories = ref(['热门', '最新', '豆瓣高分', '冷门佳片'])
-let pageNum = 1
+const movieDataCache = ref<MovieCache>({
+  '热门': { records: [], pageNum: 1, total: -1 },
+  '最新': { records: [], pageNum: 1, total: -1 },
+  '豆瓣高分': { records: [], pageNum: 1, total: -1 },
+  '冷门佳片': { records: [], pageNum: 1, total: -1 }
+});
+
 const pageSize = 60
-let total = -1;
 
 async function fetchMovie(): Promise<AxiosResponse<MovieRankRsp>> {
   return axiosInstance.get<MovieRankRsp>("/api/movieRank/", {
     params: {
-      pageNum: pageNum,
+      pageNum: movieDataCache.value[currentTab.value].pageNum,
       pageSize: pageSize,
-      category: tab.value,
+      category: currentTab.value,
     }
   })
 }
 
 async function loadMovie({done}: { done: (status: InfiniteScrollStatus) => void; }) {
+  const total = movieDataCache.value[currentTab.value].total;
+  const pageNum = movieDataCache.value[currentTab.value].pageNum
+
   if (total > 0) {
     if ((pageNum * pageSize) - total > pageSize) {
       done('empty')
@@ -32,40 +38,38 @@ async function loadMovie({done}: { done: (status: InfiniteScrollStatus) => void;
     return
   }
   const res = await fetchMovie()
-  movieInfos.value.push(...res.data.records)
-  total = res.data.total
-  pageNum++
+  movieDataCache.value[currentTab.value].records.push(...res.data.records)
+  movieDataCache.value[currentTab.value].total = res.data.total
+  movieDataCache.value[currentTab.value].pageNum ++
   done('ok')
 }
 
 function changeTab() {
-  movieInfos.value = []
-  total = -1;
-  pageNum = 1
+  movieDataCache.value[currentTab.value].records = []
+  movieDataCache.value[currentTab.value].total = -1
+  movieDataCache.value[currentTab.value].pageNum = 1
 }
 
-watch(tab, () => {
-  changeTab()
-})
 </script>
 
 <template>
   <meta name="referrer" content="no-referrer">
   <v-card style="height: calc(100vh - 68px); overflow-y: auto;">
     <v-tabs
-      v-model="tab"
+      v-model="currentTab"
       align-tabs="start"
+      @update:model-value="changeTab"
     >
       <v-tab v-for=" (category, n) in categories" :value="category" :key="n">{{ category }}</v-tab>
     </v-tabs>
 
-    <v-tabs-window v-model="tab" style="height: calc(100vh - 68px - 48px);overflow-y: auto">
+    <v-tabs-window v-model="currentTab" style="height: calc(100vh - 68px - 48px);overflow-y: auto">
       <v-tabs-window-item
         v-for=" (category, n) in categories"
         :value="category"
         :key="n"
       >
-        <v-infinite-scroll :key="n" :items="movieInfos" @load="loadMovie">
+        <v-infinite-scroll :key="n" :items="movieDataCache[category].records" @load="loadMovie">
           <template #empty>
             <div class="pa-8 text-center text-disabled">
               <p>
@@ -77,7 +81,7 @@ watch(tab, () => {
           <v-container fluid>
             <v-row>
               <v-col
-                v-for="(movieInfo, i) in movieInfos"
+                v-for="(movieInfo, i) in movieDataCache[category].records"
                 :key="i"
                 cols="4"
                 xl="1"

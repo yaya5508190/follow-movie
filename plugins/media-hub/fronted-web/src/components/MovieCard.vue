@@ -1,49 +1,59 @@
 <template>
-  <v-card
-    class="movie-card responsive-card-height"
-    @click="openLink"
-  >
+  <div @click="openLink" style="cursor: pointer;">
     <v-hover v-slot="{ isHovering, props: hoverProps }">
-      <v-img
-        :src="imageUrl"
-        class="align-end"
-        :gradient="`to bottom, rgba(0,0,0,.1), ${isHovering ? 'rgba(0,0,0,.9)' : 'rgba(0,0,0,.5)'}`"
-        height="100%"
-        cover
+      <v-card
         v-bind="hoverProps"
+        class="movie-card responsive-card-height rounded-lg"
+        :class="{ 'is-hovering': isHovering }"
+        elevation="0"
       >
-        <template #placeholder>
-          <v-row
-            class="fill-height ma-0"
-            align="center"
-            justify="center"
-          >
-            <v-progress-circular
-              indeterminate
-              color="grey-lighten-5"
-            ></v-progress-circular>
-          </v-row>
-        </template>
+        <v-img
+          :src="imageUrl"
+          class="align-end rounded-lg"
+          :gradient="isHovering ? `to bottom, rgba(0,0,0,.1), rgba(0,0,0,.9)` : undefined"
+          height="100%"
+          cover
+        >
+          <template #placeholder>
+            <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+            >
+              <v-progress-circular
+                indeterminate
+                color="grey-lighten-5"
+              ></v-progress-circular>
+            </v-row>
+          </template>
 
-        <!-- This div will contain all text content for positioning -->
-        <div class="pa-4 text-white">
-            <v-card-title class="pa-0 pb-1">{{ name }}</v-card-title>
-            <v-card-subtitle class="pa-0 d-flex align-center">
-              <v-icon color="amber" icon="mdi-star" size="small" class="mr-1"></v-icon>
-              <span>{{ rating }}</span>
-            </v-card-subtitle>
+          <!-- This div will contain all text content for positioning -->
+          <div v-if="isHovering" class="pa-4 text-white text-with-shadow">
+              <v-card-title class="pa-0 pb-1">{{ name }}</v-card-title>
+              <v-card-subtitle class="pa-0 d-flex align-center">
+                <v-icon color="amber" icon="mdi-star" size="small" class="mr-1"></v-icon>
+                <span>{{ rating }}</span>
+              </v-card-subtitle>
 
-            <div :class="['description-container', { 'is-hovering': isHovering }]">
-              <!-- pt-2 has been removed from here -->
-              <p class="pa-0 ma-0 description-text">
-                {{ description }}
-              </p>
-            </div>
-        </div>
+              <div :class="['description-container', { 'is-hovering': isHovering }]">
+                <!-- pt-2 has been removed from here -->
+                <p class="pa-0 ma-0 description-text">
+                  {{ description }}
+                </p>
+              </div>
+          </div>
 
-      </v-img>
+        </v-img>
+      </v-card>
     </v-hover>
-  </v-card>
+    <div class="pt-2">
+      <div class="text-subtitle-2 text-truncate font-weight-bold">{{ name }}</div>
+      <div class="d-flex align-center text-caption">
+        <v-icon color="amber" icon="mdi-star" size="x-small" class="mr-1"></v-icon>
+        <span>{{ rating }}</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -65,12 +75,17 @@ function openLink() {
 <style scoped>
 .movie-card {
   width: 100%;
+  overflow: hidden; /* Contain image zoom */
   transition: transform 0.2s ease-in-out;
-  overflow: hidden; /* Prevents scaled content from overlapping siblings */
-  cursor: pointer;
 }
-.movie-card:hover {
-    transform: scale(1.05);
+
+.movie-card.is-hovering {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.text-with-shadow {
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
 }
 
 /* New responsive height styles */
@@ -151,3 +166,4 @@ function openLink() {
   max-height: 4.2em; /* 1.4 * 3 */
 }
 </style>
+

@@ -13,3 +13,11 @@ export type MovieRankRsp={
   pageSize: number;
   total: number;
 }
+
+export type MovieCacheEntry = {
+  records: MovieInfo[]
+  pageNum: number
+  total: number
+}
+
+export type MovieCache = Record<string, MovieCacheEntry>
