@@ -30,6 +30,7 @@
 
 	<modules>
 		<module>follow-movie-web</module>
+		<module>common-api</module>
 		<module>plugins</module>
 	</modules>
 </project>

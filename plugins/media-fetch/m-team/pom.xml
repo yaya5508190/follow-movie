@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.yx</groupId>
-        <artifactId>plugins</artifactId>
+        <artifactId>media-fetch</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>media-hub</artifactId>
+    <artifactId>m-team</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>media-hub</name>
-    <description>媒体浏览模块</description>
+    <name>m-team</name>
+    <description>m-team插件</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,12 +32,6 @@
         <dependency>
             <groupId>com.yx</groupId>
             <artifactId>x-spider-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.yx</groupId>
-            <artifactId>common-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 

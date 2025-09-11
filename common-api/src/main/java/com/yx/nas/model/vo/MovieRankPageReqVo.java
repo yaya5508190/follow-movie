@@ -1,6 +1,6 @@
-package com.yx.nas.tool.plugins.model.vo;
+package com.yx.nas.model.vo;
 
-import com.yx.nas.tool.plugins.model.common.PageRequest;
+import com.yx.nas.model.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

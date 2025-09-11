@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @EnablePluginLoader
-public class FollowMovieWebApplication {
+public class
+FollowMovieWebApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(FollowMovieWebApplication.class, args);

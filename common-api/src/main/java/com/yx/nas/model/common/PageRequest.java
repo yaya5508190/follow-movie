@@ -1,4 +1,4 @@
-package com.yx.nas.tool.plugins.model.common;
+package com.yx.nas.model.common;
 
 import lombok.Data;
 
