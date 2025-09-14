@@ -9,5 +9,4 @@ logging:
   level:
     root: info
 server:
-  servlet:
-    context-path: /
+  port: 8080

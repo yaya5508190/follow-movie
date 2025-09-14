@@ -98,6 +98,13 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    proxy: {
+      // 以 /api 开头的请求转发到后端
+      '/9d220be1-8f62-4819-8f00-03911dc00a95/api': {
+        target: 'http://127.0.0.1:8081/', // 你的后端
+        changeOrigin: true, // 修改 Origin 为 target
+      },
+    },
   },
   css: {
     preprocessorOptions: {

@@ -24,7 +24,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>plugin-project</groupId>
+            <groupId>com.yx</groupId>
             <artifactId>plugin-loader-api</artifactId>
             <version>${project.version}</version>
         </dependency>
