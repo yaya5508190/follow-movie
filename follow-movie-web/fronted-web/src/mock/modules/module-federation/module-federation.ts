@@ -9,7 +9,7 @@ export default function setup () {
         // { alias: 'vueViteRemote', name: 'vueViteRemote', entry: 'http://localhost:5174/remoteEntry.js' },
       ],
       menus: [
-        { name: '微应用页面', path: '/remote', component: 'remote/App' },
+        { name: '微应用页面1', path: '/remote1', component: 'remote/App', parent: false, children: [] },
       ],
     } satisfies MFConfig
   })

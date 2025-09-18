@@ -14,14 +14,35 @@
       <v-divider />
 
       <v-list density="compact" nav>
-        <v-list-item
-          v-for="menu in mfConfig.menus"
-          :key="menu.name"
-          prepend-icon="mdi-home-city"
-          :title="menu.name"
-          :value="menu.name"
-          @click="$router.push(menu.path)"
-        />
+        <template v-for="menu in mfConfig.menus">
+          <template v-if="menu.children && menu.children.length > 0">
+            <v-list-group
+              :key="menu.name + '-group'"
+            >
+              <template #activator="{ props }">
+                <v-list-item
+                  v-bind="props"
+                  :title="menu.name"
+                />
+              </template>
+              <v-list-item
+                v-for="child in menu.children"
+                :key="child.name + '-item'"
+                :title="child.name"
+                :value="child.name"
+                @click="$router.push(child.path)"
+              />
+            </v-list-group>
+          </template>
+          <template v-else>
+            <v-list-item
+              :key="menu.name + '-item'"
+              :title="menu.name"
+              :value="menu.name"
+              @click="$router.push(menu.path)"
+            />
+          </template>
+        </template>
       </v-list>
     </v-navigation-drawer>
 
