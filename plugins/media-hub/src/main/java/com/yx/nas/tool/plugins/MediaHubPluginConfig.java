@@ -28,12 +28,7 @@ public class MediaHubPluginConfig implements PluginConfig {
     }
 
     @Override
-    public String parentMenuName() {
-        return "影片推荐";
-    }
-
-    @Override
     public Map<String, String> menus() {
-        return Map.of("豆瓣推荐","App");
+        return Map.of("影片推荐/豆瓣推荐","App");
     }
 }
