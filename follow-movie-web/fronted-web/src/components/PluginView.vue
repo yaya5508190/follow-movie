@@ -11,9 +11,12 @@
     },
   })
 
+  const attrs = useAttrs()
+
   onMounted(async () => {
     const remote = await loadRemoteComponent<{ mount: Function, unmount?: Function }>(props.pluginName)
-    remote.mount(container.value!, {}, vuetify)
+    const { pluginName, ...customProps } = attrs
+    remote.mount(container.value!, customProps, vuetify)
   })
 
   onBeforeUnmount(async () => {

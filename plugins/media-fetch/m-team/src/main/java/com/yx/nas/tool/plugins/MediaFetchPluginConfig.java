@@ -2,19 +2,20 @@ package com.yx.nas.tool.plugins;
 
 import api.PluginComponent;
 import api.PluginConfig;
+import com.google.auto.service.AutoService;
 
 import java.util.List;
-import java.util.Map;
 
+@AutoService(PluginConfig.class)
 public class MediaFetchPluginConfig implements PluginConfig {
     @Override
     public String name() {
-        return "";
+        return "m-team";
     }
 
     @Override
     public String version() {
-        return "";
+        return "0.0.1";
     }
 
     @Override
@@ -29,6 +30,8 @@ public class MediaFetchPluginConfig implements PluginConfig {
 
     @Override
     public List<PluginComponent> pluginComponents() {
-        return List.of();
+        return List.of(
+                new PluginComponent(pluginId(), "mediaResourceFetcher", "m-team 馒头", "App", "m-team影视资源")
+        );
     }
 }

@@ -1,8 +1,7 @@
 <template>
   <v-layout class="rounded rounded-md border">
     <v-navigation-drawer
-      permanent
-      :rail="rail"
+      v-model="open"
     >
       <v-list>
         <v-list-item
@@ -48,7 +47,7 @@
 
     <v-app-bar :elevation="0">
       <template #prepend>
-        <v-app-bar-nav-icon @click.stop="rail = !rail" />
+        <v-app-bar-nav-icon v-if="mobile" @click.stop="open = !open" />
       </template>
 
       <!--      <v-app-bar-title>Application Bar</v-app-bar-title>-->
@@ -60,6 +59,7 @@
           @click="theme.toggle()"
         />
         <v-text-field
+          v-model="searchKeyword"
           append-inner-icon="mdi-magnify"
           density="compact"
           hide-details
@@ -67,6 +67,8 @@
           single-line
           style="width: 10em;margin-right: 1em;"
           variant="solo"
+          @click:append-inner="openSearchDialog"
+          @keyup.enter="openSearchDialog"
         />
       </template>
     </v-app-bar>
@@ -76,16 +78,42 @@
         <component :is="Component" :key="route.fullPath" />
       </RouterView>
     </v-main>
+
+    <!-- 媒体搜索聚合对话框 -->
+    <AggregateSearch
+      v-model="searchDialogVisible"
+      :keyword="searchKeyword"
+    />
   </v-layout>
 </template>
 
 <script lang="ts" setup>
-  import { useTheme } from 'vuetify'
+  import { useDisplay, useTheme } from 'vuetify'
+  import AggregateSearch from '@/components/AggregateSearch.vue'
   import { useModuleFederation } from '@/stores/module-federation.ts'
+
   import '@/styles/global.scss'
 
-  const rail = ref(false)
+  const open = ref(true)
   const theme = useTheme()
+  const { mobile } = useDisplay()
+  const searchKeyword = ref('')
+  const searchDialogVisible = ref(false)
 
   const mfConfig = useModuleFederation().mfConfig
+
+  // 打开搜索对话框
+  const openSearchDialog = () => {
+    if (searchKeyword.value.trim()) {
+      searchDialogVisible.value = true
+    }
+  }
+
+  // 监听mobile状态变化，自动关闭侧边栏，初始化的时候立即执行一次
+  watch(mobile, isMobile => {
+    if (isMobile) {
+      open.value = false
+    }
+  }, { immediate: true })
+
 </script>

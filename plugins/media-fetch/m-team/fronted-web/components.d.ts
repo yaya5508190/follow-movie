@@ -10,7 +10,5 @@ declare module 'vue' {
   export interface GlobalComponents {
     MediaCard: typeof import('./src/components/media-card.vue')['default']
     MediaResourceFetcher: typeof import('./src/pages/media-resource-fetcher.vue')['default']
-    MovieCard: typeof import('./src/components/movie-card.vue')['default']
-    MovieRank: typeof import('./src/pages/MovieRank.vue')['default']
   }
 }

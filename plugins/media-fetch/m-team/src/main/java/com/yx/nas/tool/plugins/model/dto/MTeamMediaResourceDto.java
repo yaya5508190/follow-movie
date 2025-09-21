@@ -76,6 +76,26 @@ public class MTeamMediaResourceDto {
         private Boolean banned;
         private Boolean visible;
         private String promotionRule;
-        private String mallSingleFree;
+        private MallSingleFreeVo mallSingleFree;
+    }
+
+    @Data
+    public static class MallSingleFreeVo {
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime createdDate;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime lastModifiedDate;
+        private String id;
+        private String userid;
+        private String torrent;
+        private Boolean isAdult;
+        private String points;
+        private String freeDay;
+        private String auction;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime startDate;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime endDate;
+        private String status;
     }
 }

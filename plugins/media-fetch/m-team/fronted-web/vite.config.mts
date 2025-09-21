@@ -80,7 +80,9 @@ export default defineConfig({
   },
   server: {
     port: 3002,
-    origin: 'http://localhost:3002',
+    host: '0.0.0.0',
+    origin: 'http://192.168.123.249:3002',
+    cors: true,
     proxy: {
       // 以 /api 开头的请求转发到后端
       '/0fb0cde6-545c-4172-82b8-d2404dbbfb51/api': {
@@ -99,8 +101,8 @@ export default defineConfig({
       },
     },
   },
-  // base: '/0fb0cde6-545c-4172-82b8-d2404dbbfb51/',
-  base: '/',
+  base: '/0fb0cde6-545c-4172-82b8-d2404dbbfb51/',
+  // base: '/',
   build: {
     target: 'esnext' ,
     // minify: false,

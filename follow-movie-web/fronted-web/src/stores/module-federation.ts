@@ -7,6 +7,7 @@ export const useModuleFederation = defineStore('module-federation', {
     mfConfig: {
       remotes: [],
       menus: [],
+      components: [],
     } as MFConfig,
   }),
 
