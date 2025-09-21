@@ -7,6 +7,8 @@ target/
 node_modules
 dist/
 static/
+package-lock.json
+.eslintrc-auto-import.json
 
 
 ### STS ###
