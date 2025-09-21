@@ -1,32 +1,33 @@
-import { fileURLToPath, URL } from 'node:url'
-import { federation } from '@module-federation/vite'
-import Vue from '@vitejs/plugin-vue'
 // Plugins
 import AutoImport from 'unplugin-auto-import/vite'
-import Fonts from 'unplugin-fonts/vite'
 import Components from 'unplugin-vue-components/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
-import VueRouter from 'unplugin-vue-router/vite'
+import Vue from '@vitejs/plugin-vue'
+import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import Fonts from 'unplugin-fonts/vite'
 
 // Utilities
 import { defineConfig } from 'vite'
-import Layouts from 'vite-plugin-vue-layouts-next'
-
-import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import { fileURLToPath, URL } from 'node:url'
+import {federation} from "@module-federation/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    VueRouter({
-      dts: 'src/typed-router.d.ts',
+    Vue({
+      template: { transformAssetUrls },
     }),
-    Layouts(),
+    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
+    Vuetify(),
+    Components({
+      // 默认是 ['src/components']，这里加上你新的目录
+      dirs: ['src/components', 'src/pages'],
+      extensions: ['vue'], // 需要的话可加 'tsx'
+      deep: true,          // 递归子目录
+    }),
     AutoImport({
       imports: [
         'vue',
-        VueRouterAutoImports,
         {
-          'pinia': ['defineStore', 'storeToRefs'],
           '@/plugins/axios.ts': ['axiosInstance'],
         },
       ],
@@ -35,19 +36,6 @@ export default defineConfig({
         enabled: true,
       },
       vueTemplate: true,
-    }),
-    Components({
-      dts: 'src/components.d.ts',
-    }),
-    Vue({
-      template: { transformAssetUrls },
-    }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
-    Vuetify({
-      autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
     }),
     Fonts({
       fontsource: {
@@ -61,11 +49,11 @@ export default defineConfig({
       },
     }),
     federation({
-      name: 'x-fusion',
-      filename: 'remoteEntry.js',
+      name: 'm-team-resource-fetcher',
       exposes: {
-        './App': './src/App.vue',
+        './App': './src/exposes/mount.ts',
       },
+      filename: 'remoteEntry.js',
       manifest: true,
       shared: {
         vue: { singleton: true, requiredVersion: '^3.4.0' },
@@ -73,13 +61,7 @@ export default defineConfig({
     }),
   ],
   optimizeDeps: {
-    exclude: [
-      'vuetify',
-      'vue-router',
-      'unplugin-vue-router/runtime',
-      'unplugin-vue-router/data-loaders',
-      'unplugin-vue-router/data-loaders/basic',
-    ],
+    exclude: ['vuetify'],
   },
   define: { 'process.env': {} },
   resolve: {
@@ -97,7 +79,15 @@ export default defineConfig({
     ],
   },
   server: {
-    port: 3000,
+    port: 3002,
+    origin: 'http://localhost:3002',
+    proxy: {
+      // 以 /api 开头的请求转发到后端
+      '/0fb0cde6-545c-4172-82b8-d2404dbbfb51/api': {
+        target: 'http://127.0.0.1:8082/', // 你的后端
+        changeOrigin: true,               // 修改 Origin 为 target
+      },
+    },
   },
   css: {
     preprocessorOptions: {
@@ -109,10 +99,13 @@ export default defineConfig({
       },
     },
   },
-  base: './',
+  // base: '/0fb0cde6-545c-4172-82b8-d2404dbbfb51/',
+  base: '/',
   build: {
-    target: 'esnext',
+    target: 'esnext' ,
+    // minify: false,
+    // sourcemap: true,
     outDir: 'dist',
-    assetsDir: '', // 👈 静态资源直接输出在 dist 根目录
+    assetsDir: '',   // 👈 静态资源直接输出在 dist 根目录
   },
 })

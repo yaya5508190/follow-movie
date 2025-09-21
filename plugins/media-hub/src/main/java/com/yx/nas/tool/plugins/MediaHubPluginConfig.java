@@ -1,8 +1,10 @@
 package com.yx.nas.tool.plugins;
 
+import api.PluginComponent;
 import api.PluginConfig;
 import com.google.auto.service.AutoService;
 
+import java.util.List;
 import java.util.Map;
 
 @AutoService(PluginConfig.class)
@@ -28,7 +30,9 @@ public class MediaHubPluginConfig implements PluginConfig {
     }
 
     @Override
-    public Map<String, String> menus() {
-        return Map.of("影片推荐/豆瓣推荐","App");
+    public List<PluginComponent> pluginComponents() {
+        return List.of(
+                new PluginComponent(pluginId(), "menu", "影片推荐/豆瓣推荐", "App", "豆瓣热门影片推荐")
+        );
     }
 }

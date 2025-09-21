@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {InfiniteScrollStatus} from "@/types/vuetify";
-import type {MovieCache, MovieInfo, MovieRankRsp} from "@/types/movie-rank";
+import type {MovieCache, MovieRankRsp} from "@/types/movie-rank";
 import type {AxiosResponse} from "axios";
 
 const currentTab = ref("热门")

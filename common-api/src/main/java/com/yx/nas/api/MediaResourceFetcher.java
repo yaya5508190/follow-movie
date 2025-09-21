@@ -1,8 +1,12 @@
 package com.yx.nas.api;
 
+import com.yx.nas.model.common.PageResult;
+import com.yx.nas.model.dto.MediaResourceDto;
 import com.yx.nas.model.dto.MovieRankDto;
+import com.yx.nas.model.vo.MediaResourcePageReqVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 媒体信息获取接口
@@ -18,11 +22,8 @@ public interface MediaResourceFetcher {
 
     /**
      * 媒体搜索
-     *
-     * @param keyword  关键词
-     * @param page     页码
-     * @param pageSize 每页数量
+     * @param reqVo 查询参数
      * @return 媒体列表
      */
-    List<MovieRankDto> search(String keyword, int page, int pageSize);
+    PageResult<MediaResourceDto> search(MediaResourcePageReqVo reqVo) throws Exception;
 }

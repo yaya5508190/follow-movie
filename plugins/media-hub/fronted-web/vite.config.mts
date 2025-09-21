@@ -49,7 +49,7 @@ export default defineConfig({
       },
     }),
     federation({
-      name: 'x-mars',
+      name: 'douban-meida-rank-fetcher',
       exposes: {
         './App': './src/exposes/mount.ts',
       },
