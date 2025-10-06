@@ -1,6 +1,11 @@
 spring:
   application:
     name: plugin-loader
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/follow_movie
+    username: postgres
+    password: 123
 plugin:
   path: C:\develop\x-project\follow-movie\plugins\media-hub\target
   scan: true
