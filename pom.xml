@@ -12,6 +12,10 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-boot.version>3.5.5</spring-boot.version>
+        <jimmer.version>0.9.111</jimmer.version>
+        <lombok.version>1.18.30</lombok.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
+        <postgresql.version>42.6.0</postgresql.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -25,12 +29,31 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-		</dependencies>
+			<dependency>
+				<groupId>org.babyfish.jimmer</groupId>
+				<artifactId>jimmer-bom</artifactId>
+				<version>${jimmer.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        </dependencies>
 	</dependencyManagement>
 
 	<modules>
 		<module>follow-movie-web</module>
 		<module>common-api</module>
+		<module>common-repository</module>
 		<module>plugins</module>
 	</modules>
 </project>
