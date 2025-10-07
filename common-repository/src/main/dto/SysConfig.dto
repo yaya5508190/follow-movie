@@ -1,6 +1,0 @@
-export com.yx.nas.entity.SysConfig
--> package com.yx.nas.dto
-
-SimpleSysConfigView {
-    #allScalars
-}

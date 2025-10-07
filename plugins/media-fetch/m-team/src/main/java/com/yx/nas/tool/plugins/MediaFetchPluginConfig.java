@@ -3,10 +3,12 @@ package com.yx.nas.tool.plugins;
 import api.PluginComponent;
 import api.PluginConfig;
 import com.google.auto.service.AutoService;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @AutoService(PluginConfig.class)
+@Component
 public class MediaFetchPluginConfig implements PluginConfig {
     @Override
     public String name() {

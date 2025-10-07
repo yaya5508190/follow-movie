@@ -16,14 +16,14 @@ export type MediaResource = {
   createdDate: string; // 资源创建时间
 }
 
-export type PageResult<T> {
+export type PageResult<T> = {
   pageNum: number;
   pageSize: number;
   total: number;
   records: T[];
 }
 
-export type MediaResourcePageReq {
+export type MediaResourcePageReq = {
   keyword?: string;
   pageNum?: number;
   pageSize?: number;

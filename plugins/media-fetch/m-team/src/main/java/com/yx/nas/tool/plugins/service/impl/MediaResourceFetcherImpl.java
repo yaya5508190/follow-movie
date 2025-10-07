@@ -7,10 +7,12 @@ import com.yx.framework.spider.fetch.Fetcher;
 import com.yx.framework.spider.model.Page;
 import com.yx.framework.spider.model.SpiderRequest;
 import com.yx.nas.api.MediaResourceFetcher;
+import com.yx.nas.enums.AuthTypeEnum;
 import com.yx.nas.model.common.PageResult;
 import com.yx.nas.model.dto.MediaResourceDto;
 import com.yx.nas.model.vo.MediaResourcePageReqVo;
-import com.yx.nas.repository.SysConfigRepository;
+import com.yx.nas.repository.MediaFetchAuthRepository;
+import com.yx.nas.tool.plugins.MediaFetchPluginConfig;
 import com.yx.nas.tool.plugins.model.vo.MTeamMediaResourceReqVo;
 import com.yx.nas.tool.plugins.service.helper.MediaResourceFetcherHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -25,10 +27,16 @@ import java.util.Optional;
 public class MediaResourceFetcherImpl implements MediaResourceFetcher {
     private final Fetcher fetcher;
     private final JsonParserEngine parserEngine;
-    private final SysConfigRepository sysConfigRepository;
+    private final MediaFetchAuthRepository mediaFetchAuthRepository;
+    private final MediaFetchPluginConfig mediaFetchPluginConfig;
 
-    public MediaResourceFetcherImpl(Fetcher fetcher, JsonParserEngine parserEngine, SysConfigRepository sysConfigRepository) {
-        this.sysConfigRepository = sysConfigRepository;
+    public MediaResourceFetcherImpl(Fetcher fetcher,
+                                    JsonParserEngine parserEngine,
+                                    MediaFetchAuthRepository mediaFetchAuthRepository,
+                                    MediaFetchPluginConfig mediaFetchPluginConfig
+    ) {
+        this.mediaFetchAuthRepository = mediaFetchAuthRepository;
+        this.mediaFetchPluginConfig = mediaFetchPluginConfig;
         this.fetcher = fetcher;
         this.parserEngine = parserEngine;
     }
@@ -39,11 +47,16 @@ public class MediaResourceFetcherImpl implements MediaResourceFetcher {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public PageResult<MediaResourceDto> search(MediaResourcePageReqVo reqVo) throws Exception {
         String url = "https://api.m-team.cc/api/torrent/search";
         // 从系统配置获取API Key
-        String apiKey = sysConfigRepository.findByTypeAndKey("API_KEY", "M_TEAM_API_KEY").getConfigValue();
-        if (StringUtils.isNoneBlank(apiKey)) {
+        String apiKey = mediaFetchAuthRepository.findBySourceAndType(
+                mediaFetchPluginConfig.name(),
+                AuthTypeEnum.API_KEY.getCode()
+        ).toEntity().apiKey();
+
+        if (StringUtils.isNotBlank(apiKey)) {
             MTeamMediaResourceReqVo mTeamMediaResourceReqVo = MediaResourceFetcherHelper.buildMTeamMediaResourceReqVo(reqVo);
             Page fetchPage = fetcher.fetch(SpiderRequest.post(url, Map.ofEntries(
                     Map.entry("Accept", "*/*"),
