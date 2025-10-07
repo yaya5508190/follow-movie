@@ -1,6 +1,8 @@
 package com.yx.nas.entity;
 
 import java.time.LocalDateTime;
+
+import com.yx.nas.entity.base.BaseEntity;
 import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.*;
 
@@ -15,7 +17,7 @@ import org.babyfish.jimmer.sql.*;
  */
 @Entity
 @Table(name = "media_fetch_auth")
-public interface MediaFetchAuth {
+public interface MediaFetchAuth extends BaseEntity {
 
     /**
      * id
@@ -69,18 +71,5 @@ public interface MediaFetchAuth {
     @Column(name = "extra_metainfo")
     @Nullable
     String extraMetainfo();
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "create_time")
-    LocalDateTime createTime();
-
-    /**
-     * 更新时间
-     */
-    @Column(name = "update_time")
-    @Nullable
-    LocalDateTime updateTime();
 
 }

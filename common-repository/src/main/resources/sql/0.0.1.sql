@@ -49,3 +49,46 @@ comment on column media_fetch_auth.create_time is
 
 comment on column media_fetch_auth.update_time is
     '更新时间';
+
+
+drop index if exists u_idx_resource_fetcher;
+
+drop table if exists  media_torrent_record;
+
+/*==============================================================*/
+/* Table: media_torrent_record                                  */
+/*==============================================================*/
+create table media_torrent_record
+(
+    id             BIGSERIAL    not null,
+    resource_id    VARCHAR(150) not null,
+    fetcher_source VARCHAR(150) not null,
+    torrent_url    VARCHAR(500) not null,
+    torrent_status INT2         not null default 1,
+    create_time    TIMESTAMP    not null default CURRENT_TIMESTAMP,
+    update_time    TIMESTAMP    null,
+    constraint PK_MEDIA_TORRENT_RECORD primary key (id)
+);
+
+comment on table media_torrent_record is
+    '种子下载记录表';
+
+comment on column media_torrent_record.fetcher_source is
+    '来源站点';
+
+comment on column media_torrent_record.torrent_status is
+    '种子状态 1: 待下载  2:已下载';
+
+comment on column media_torrent_record.create_time is
+    '创建时间';
+
+comment on column media_torrent_record.update_time is
+    '更新时间';
+
+/*==============================================================*/
+/* Index: u_idx_resource_fetcher                                */
+/*==============================================================*/
+create unique index u_idx_resource_fetcher on media_torrent_record (
+                                                                    resource_id,
+                                                                    fetcher_source
+    );

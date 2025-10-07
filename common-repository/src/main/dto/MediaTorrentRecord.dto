@@ -1,0 +1,6 @@
+export com.yx.nas.entity.MediaTorrentRecord
+    -> package com.yx.nas.dto
+
+input MediaTorrentRecordInput {
+    #allScalars(MediaTorrentRecord)
+}

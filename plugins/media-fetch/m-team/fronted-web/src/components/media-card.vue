@@ -15,7 +15,8 @@
           </v-row>
         </template>
       </v-img>
-      <div v-else style="height:200px;width:130px;display:flex;align-items:center;justify-content:center;background:transparent;">
+      <div v-else
+           style="height:200px;width:130px;display:flex;align-items:center;justify-content:center;background:transparent;">
         <v-icon color="grey" size="40">mdi-image-off</v-icon>
       </div>
     </div>
@@ -47,7 +48,22 @@
         <v-icon icon="mdi-arrow-down-bold" size="x-small" class="mr-1" color="red"></v-icon>
         <span class="mr-3">{{ resource.leechers }}</span>
         <v-icon icon="mdi-harddisk" size="x-small" class="mr-1"></v-icon>
-        <span>{{ formattedSize }}</span>
+        <span class="mr-3">{{ formattedSize }}</span>
+        <v-progress-circular
+          v-if="downloading"
+          indeterminate
+          size="12"
+          width="2"
+          color="primary"
+        ></v-progress-circular>
+        <v-icon
+          v-else
+          icon="mdi-download"
+          size="x-small"
+          color="primary"
+          class="cursor-pointer"
+          @click="handleDownload(resource)"
+        ></v-icon>
       </div>
 
       <div class="mt-1 chip-group-wrapper">
@@ -62,13 +78,14 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import type {MediaResource} from '@/types/media-resource-fetcher';
+import {axiosInstance} from '@/plugins/axios';
 
 const props = defineProps<{
   resource: MediaResource
 }>();
 
 const imgLoadingError = ref(false);
-
+const downloading = ref(false);
 
 const formattedSize = computed(() => {
   const sizeInBytes = props.resource.size;
@@ -82,6 +99,26 @@ const formattedSize = computed(() => {
 function openLink(url: string) {
   if (typeof window !== 'undefined' && url) {
     window.open(url, '_blank');
+  }
+}
+
+async function handleDownload(resource: MediaResource) {
+  downloading.value = true;
+  try {
+    const response = await axiosInstance.post(`/api/mediaResource/downloadTorrent/${resource.id}`);
+
+    if (response.data) {
+      console.log('下载种子成功:', resource.id);
+      // 可以添加成功提示
+    } else {
+      console.error('下载种子失败:', resource.id);
+      // 可以添加失败提示
+    }
+  } catch (error) {
+    console.error('下载种子出错:', error);
+    // 可以添加错误提示
+  } finally {
+    downloading.value = false;
   }
 }
 </script>

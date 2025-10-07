@@ -67,7 +67,7 @@ watchEffect(async () => {
       }
     };
     try {
-      const response = await axiosInstance.post<PageResult<MediaResource>>('/api/media-resource/search', req);
+      const response = await axiosInstance.post<PageResult<MediaResource>>('/api/mediaResource/search', req);
       searchResult.value = response.data;
       // 如果是分页触发的请求，在内容更新并渲染后通知聚合组件滚动到顶部
       if (pageChanged.value) {
