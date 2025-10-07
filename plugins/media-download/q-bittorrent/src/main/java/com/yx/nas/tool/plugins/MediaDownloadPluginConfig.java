@@ -5,17 +5,16 @@ import api.PluginConfig;
 import com.google.auto.service.AutoService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @AutoService(PluginConfig.class)
 @Configuration
 @ComponentScan(basePackages = "com.yx.framework")
-public class MediaFetchPluginConfig implements PluginConfig {
+public class MediaDownloadPluginConfig  implements PluginConfig {
     @Override
     public String name() {
-        return "m-team";
+        return "q-bittorrent";
     }
 
     @Override
@@ -30,13 +29,11 @@ public class MediaFetchPluginConfig implements PluginConfig {
 
     @Override
     public String pluginId() {
-        return "0fb0cde6-545c-4172-82b8-d2404dbbfb51";
+        return "cc659cb6-9d35-4eef-bb08-4602eab88671";
     }
 
     @Override
     public List<PluginComponent> pluginComponents() {
-        return List.of(
-                new PluginComponent(pluginId(), "mediaResourceFetcher", "m-team 馒头", "App", "m-team影视资源")
-        );
+        return List.of();
     }
 }

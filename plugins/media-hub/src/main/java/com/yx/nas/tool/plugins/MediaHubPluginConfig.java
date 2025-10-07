@@ -3,11 +3,15 @@ package com.yx.nas.tool.plugins;
 import api.PluginComponent;
 import api.PluginConfig;
 import com.google.auto.service.AutoService;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import java.util.Map;
 
 @AutoService(PluginConfig.class)
+@Configuration
+@ComponentScan(basePackages = "com.yx.framework")
 public class MediaHubPluginConfig implements PluginConfig {
     @Override
     public String name() {

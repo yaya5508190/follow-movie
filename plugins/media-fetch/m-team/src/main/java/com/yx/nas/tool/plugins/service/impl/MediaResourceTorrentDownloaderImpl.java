@@ -10,14 +10,21 @@ import com.yx.nas.api.MediaResourceTorrentDownloader;
 import com.yx.nas.dto.MediaTorrentRecordInput;
 import com.yx.nas.enums.AuthTypeEnum;
 import com.yx.nas.enums.TorrentStatusEnum;
+import com.yx.nas.model.event.DownloadEvent;
 import com.yx.nas.repository.MediaFetchAuthRepository;
 import com.yx.nas.repository.MediaTorrentRecordRepository;
 import com.yx.nas.tool.plugins.MediaFetchPluginConfig;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -29,13 +36,14 @@ import java.util.Optional;
  * @date 2025-10-07
  */
 @Service
-public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentDownloader {
+public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentDownloader, ApplicationContextAware {
 
     private final Fetcher fetcher;
     private final JsonParserEngine parserEngine;
     private final MediaFetchAuthRepository mediaFetchAuthRepository;
     private final MediaTorrentRecordRepository mediaTorrentRecordRepository;
     private final MediaFetchPluginConfig mediaFetchPluginConfig;
+    private ApplicationContext applicationContext;
 
     public MediaResourceTorrentDownloaderImpl(
             Fetcher fetcher,
@@ -80,9 +88,20 @@ public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentD
             mediaTorrentRecordInput.setTorrentStatus(TorrentStatusEnum.PENDING.getCode());
             mediaTorrentRecordInput.setTorrentUrl(String.valueOf(parseData.get("torrentUrl")));
             mediaTorrentRecordRepository.save(mediaTorrentRecordInput);
+
+            if (Objects.isNull(applicationContext.getParent())) {
+                applicationContext.publishEvent(new DownloadEvent("m-team", "q-bittorrent"));
+            } else {
+                applicationContext.getParent().publishEvent(new DownloadEvent("m-team", "q-bittorrent"));
+            }
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void setApplicationContext(@NotNull ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

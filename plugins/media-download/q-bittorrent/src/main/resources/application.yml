@@ -1,0 +1,7 @@
+logging:
+  level:
+    root: debug
+server:
+  servlet:
+    context-path: "/cc659cb6-9d35-4eef-bb08-4602eab88671"
+  port: 8083

@@ -5,6 +5,7 @@ import com.yx.nas.api.MediaResourceTorrentDownloader;
 import com.yx.nas.model.common.PageResult;
 import com.yx.nas.model.dto.MediaResourceDto;
 import com.yx.nas.model.vo.MediaResourcePageReqVo;
+import com.yx.nas.tool.plugins.MTeamMediaResourceApplication;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +14,10 @@ import org.springframework.util.Assert;
 import java.util.List;
 import java.util.Map;
 
-@SpringBootTest
+@SpringBootTest(
+        classes =  MTeamMediaResourceApplication.class,
+        properties = "plugin.standalone=true"
+)
 class MediaResourceFetcherImplTest {
     @Resource
     private MediaResourceFetcher mediaResourceFetcher;
