@@ -4,8 +4,10 @@ import com.yx.nas.entity.MediaTorrentRecord;
 import com.yx.nas.enums.TorrentStatusEnum;
 import com.yx.nas.repository.MediaTorrentRecordRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,7 +24,8 @@ public class CommonService {
     public final MediaTorrentRecordRepository mediaTorrentRecordRepository;
     private final WebClient webClient;
 
-    public CommonService(MediaTorrentRecordRepository mediaTorrentRecordRepository, WebClient webClient) {
+    public CommonService(MediaTorrentRecordRepository mediaTorrentRecordRepository,
+                         @Qualifier("webClientForTorrentDownload") WebClient webClient) {
         this.mediaTorrentRecordRepository = mediaTorrentRecordRepository;
         this.webClient = webClient;
     }
@@ -33,11 +36,11 @@ public class CommonService {
      * @param torrentRecordId 资源id
      * @param downloadLogic   下载逻辑,传入的string为种子文件本地临时路径
      */
-    public void resolveDownloadTask(Long torrentRecordId, Function<String, Boolean> downloadLogic) {
+    public boolean resolveDownloadTask(Long torrentRecordId, Function<String, Boolean> downloadLogic) {
         MediaTorrentRecord torrentRecord = mediaTorrentRecordRepository.findById(torrentRecordId);
         if (torrentRecord == null) {
             log.error("种子记录不存在，id: {}", torrentRecordId);
-            return;
+            return false;
         }
         //如果状态是待下载，则开始下载
         if (TorrentStatusEnum.PENDING.getCode() == torrentRecord.torrentStatus()) {
@@ -50,15 +53,33 @@ public class CommonService {
                 log.debug("创建临时文件: {}", tempFile.toAbsolutePath());
 
                 // 同步下载文件（WebClient 会自动跟随 302 重定向）
-                byte[] bytes = webClient.get()
+                Mono<byte[]> responseMono = webClient.get()
                         .uri(new URI(torrentUrl))
-                        .retrieve()
-                        .bodyToMono(byte[].class)
-                        .block();
+                        .exchangeToMono(response -> {
+                            if (!response.statusCode().is2xxSuccessful()) {
+                                log.error("下载种子文件失败, 非成功状态码: {}, url: {}",
+                                        response.statusCode().value(), torrentUrl);
+                                return Mono.empty();
+                            }
+                            boolean isJson = response.headers()
+                                    .contentType()
+                                    .map(mediaType -> mediaType.toString().contains("application/json"))
+                                    .orElse(false);
+                            if (isJson) {
+                                return response.bodyToMono(String.class)
+                                        .flatMap(json -> {
+                                            log.info("收到 JSON 内容: {}", json);
+                                            return Mono.empty();
+                                        });
+                            }
+                            return response.bodyToMono(byte[].class);
+                        });
+
+                byte[] bytes = responseMono.block();
 
                 if (bytes == null || bytes.length == 0) {
                     log.error("下载种子文件为空, url: {}", torrentUrl);
-                    return;
+                    return false;
                 }
 
                 // 写入文件
@@ -72,9 +93,11 @@ public class CommonService {
                 } else {
                     log.error("种子下载失败，id: {}", torrentRecordId);
                 }
+                return downloadSuccess;
 
             } catch (IOException | URISyntaxException e) {
                 log.error("下载种子文件失败, url: {}", torrentUrl, e);
+                return false;
             } finally {
                 // 在下载逻辑执行完成后删除临时文件
                 if (tempFile != null) {
@@ -90,6 +113,7 @@ public class CommonService {
             }
         } else {
             log.info("种子记录状态不是待下载，跳过，id: {}, status: {}", torrentRecordId, torrentRecord.torrentStatus());
+            return false;
         }
     }
 }

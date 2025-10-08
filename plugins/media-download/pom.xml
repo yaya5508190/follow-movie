@@ -13,6 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>q-bittorrent</module>
-        <module>common</module>
+        <module>media-download-common</module>
     </modules>
 </project>

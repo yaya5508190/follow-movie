@@ -12,6 +12,6 @@ plugin:
   context-path: /
 logging:
   level:
-    root: info
+    root: debug
 server:
   port: 8080

@@ -53,7 +53,7 @@ comment on column media_fetch_auth.update_time is
 
 drop index if exists u_idx_resource_fetcher;
 
-drop table if exists  media_torrent_record;
+drop table if exists media_torrent_record;
 
 /*==============================================================*/
 /* Table: media_torrent_record                                  */
@@ -88,7 +88,61 @@ comment on column media_torrent_record.update_time is
 /*==============================================================*/
 /* Index: u_idx_resource_fetcher                                */
 /*==============================================================*/
-create unique index u_idx_resource_fetcher on media_torrent_record (
-                                                                    resource_id,
-                                                                    fetcher_source
-    );
+create unique index u_idx_resource_fetcher on media_torrent_record (resource_id, fetcher_source);
+
+drop index if exists u_idx_name;
+
+drop table if exists download_tool_info;
+
+/*==============================================================*/
+/* Table: download_tool_info                                    */
+/*==============================================================*/
+create table download_tool_info
+(
+    id          BIGSERIAL     not null,
+    name        VARCHAR(150)  not null,
+    type        INT2          not null,
+    url         VARCHAR(255)  not null,
+    username    VARCHAR(255)  null,
+    password    VARCHAR(255)  null,
+    cookie      VARCHAR(2000) null,
+    save_path   VARCHAR(1000) not null,
+    create_time TIMESTAMP     not null default CURRENT_TIMESTAMP,
+    update_time TIMESTAMP     null,
+    constraint PK_DOWNLOAD_TOOL_INFO primary key (id)
+);
+
+comment on column download_tool_info.id is
+    'id主键';
+
+comment on column download_tool_info.name is
+    '名称';
+
+comment on column download_tool_info.type is
+    '工具类型 1: qbittorrent';
+
+comment on column download_tool_info.url is
+    '访问地址';
+
+comment on column download_tool_info.username is
+    '用户名';
+
+comment on column download_tool_info.password is
+    '密码';
+
+comment on column download_tool_info.cookie is
+    'Cookie';
+
+comment on column download_tool_info.save_path is
+    '默认保存路径';
+
+comment on column download_tool_info.create_time is
+    '创建时间';
+
+comment on column download_tool_info.update_time is
+    '更新时间';
+
+/*==============================================================*/
+/* Index: u_idx_name                                            */
+/*==============================================================*/
+create unique index u_idx_name on download_tool_info ( name );

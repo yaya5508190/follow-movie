@@ -15,7 +15,8 @@
         <jimmer.version>0.9.111</jimmer.version>
         <lombok.version>1.18.30</lombok.version>
         <commons-lang3.version>3.18.0</commons-lang3.version>
-        <postgresql.version>42.6.0</postgresql.version>
+        <postgresql.version>42.7.4</postgresql.version>
+        <okhttp.version>4.12.0</okhttp.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -40,6 +41,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.postgresql</groupId>

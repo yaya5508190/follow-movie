@@ -7,9 +7,9 @@
         <artifactId>media-download</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>common</artifactId>
+    <artifactId>media-download-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>common</name>
+    <name>media-download-common</name>
     <description>下载common模块</description>
 
     <properties>

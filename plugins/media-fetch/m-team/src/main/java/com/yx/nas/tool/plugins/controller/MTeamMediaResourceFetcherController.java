@@ -2,7 +2,6 @@ package com.yx.nas.tool.plugins.controller;
 
 import com.yx.nas.api.MediaResourceFetcher;
 import com.yx.nas.api.MediaResourceTorrentDownloader;
-import com.yx.nas.dto.MediaTorrentRecordInput;
 import com.yx.nas.model.common.PageResult;
 import com.yx.nas.model.dto.MediaResourceDto;
 import com.yx.nas.model.vo.MediaResourcePageReqVo;

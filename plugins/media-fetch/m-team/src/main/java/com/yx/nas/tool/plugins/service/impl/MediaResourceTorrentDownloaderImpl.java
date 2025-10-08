@@ -8,6 +8,7 @@ import com.yx.framework.spider.model.Page;
 import com.yx.framework.spider.model.SpiderRequest;
 import com.yx.nas.api.MediaResourceTorrentDownloader;
 import com.yx.nas.dto.MediaTorrentRecordInput;
+import com.yx.nas.entity.MediaTorrentRecord;
 import com.yx.nas.enums.AuthTypeEnum;
 import com.yx.nas.enums.TorrentStatusEnum;
 import com.yx.nas.model.event.DownloadEvent;
@@ -15,6 +16,7 @@ import com.yx.nas.repository.MediaFetchAuthRepository;
 import com.yx.nas.repository.MediaTorrentRecordRepository;
 import com.yx.nas.tool.plugins.MediaFetchPluginConfig;
 import org.apache.commons.lang3.StringUtils;
+import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -87,12 +89,13 @@ public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentD
             mediaTorrentRecordInput.setFetcherSource(mediaFetchPluginConfig.name());
             mediaTorrentRecordInput.setTorrentStatus(TorrentStatusEnum.PENDING.getCode());
             mediaTorrentRecordInput.setTorrentUrl(String.valueOf(parseData.get("torrentUrl")));
-            mediaTorrentRecordRepository.save(mediaTorrentRecordInput);
+            SimpleSaveResult<MediaTorrentRecord> saveResult = mediaTorrentRecordRepository.save(mediaTorrentRecordInput);
+            Long savedId = saveResult.getModifiedEntity().id();
 
             if (Objects.isNull(applicationContext.getParent())) {
-                applicationContext.publishEvent(new DownloadEvent("m-team", "q-bittorrent"));
+                applicationContext.publishEvent(new DownloadEvent("m-team", savedId, "q-bittorrent"));
             } else {
-                applicationContext.getParent().publishEvent(new DownloadEvent("m-team", "q-bittorrent"));
+                applicationContext.getParent().publishEvent(new DownloadEvent("m-team", savedId, "q-bittorrent"));
             }
             return true;
         }

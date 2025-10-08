@@ -5,3 +5,12 @@ server:
   servlet:
     context-path: "/cc659cb6-9d35-4eef-bb08-4602eab88671"
   port: 8083
+
+spring:
+  application:
+    name: plugin-loader
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/follow_movie
+    username: postgres
+    password: 123
