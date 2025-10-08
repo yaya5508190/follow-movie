@@ -7,10 +7,10 @@
         <artifactId>media-download</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>q-bittorrent</artifactId>
+    <artifactId>common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>q-bittorrent</name>
-    <description>q-bittorrent插件</description>
+    <name>common</name>
+    <description>下载common模块</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,41 +20,30 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.yx</groupId>
-            <artifactId>plugin-loader-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.yx</groupId>
-            <artifactId>common-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.yx</groupId>
             <artifactId>common-repository</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
-        <!-- 自动生成 ServiceLoader 配置文件的插件 -->
         <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
-            <version>1.1.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.babyfish.jimmer</groupId>
+            <artifactId>jimmer-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 
@@ -72,9 +61,9 @@
                             <version>${lombok.version}</version>
                         </path>
                         <path>
-                            <groupId>com.google.auto.service</groupId>
-                            <artifactId>auto-service</artifactId>
-                            <version>1.1.1</version>
+                            <groupId>org.babyfish.jimmer</groupId>
+                            <artifactId>jimmer-apt</artifactId>
+                            <version>${jimmer.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

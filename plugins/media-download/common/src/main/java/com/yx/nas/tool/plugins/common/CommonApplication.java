@@ -1,4 +1,4 @@
-package com.yx.nas.tool.plugins;
+package com.yx.nas.tool.plugins.common;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 @ConditionalOnProperty(name = "plugin.standalone", havingValue = "true")
 @SpringBootApplication(scanBasePackages = "com.yx")
-public class QBittorrentApplication {
+public class CommonApplication {
     public static void main(String[] args) {
         System.setProperty("plugin.standalone", "true");
-        SpringApplication.run(QBittorrentApplication.class, args);
+        SpringApplication.run(CommonApplication.class, args);
     }
 }
