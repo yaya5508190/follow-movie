@@ -5,6 +5,7 @@ export interface MenuItem {
   path: string
   component: string
   parent: boolean
+  local?: boolean
   children: MenuItem[]
 }
 

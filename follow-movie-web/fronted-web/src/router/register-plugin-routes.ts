@@ -2,7 +2,6 @@ import type { Router } from 'vue-router'
 import type { MenuItem } from '@/types/module-federation.ts'
 import { setupLayouts } from 'virtual:generated-layouts'
 import PluginView from '@/components/PluginView.vue'
-import router from '@/router/index.ts'
 import { useModuleFederation } from '@/stores/module-federation.ts'
 
 /**
@@ -36,10 +35,11 @@ function addRoute (menu: MenuItem, router: Router) {
     return
   }
   console.log(router.getRoutes())
+  console.log(menu.component)
   router.addRoute(setupLayouts([{
     name: routeName,
     path: menu.path,
-    component: PluginView,
+    component: menu.local ? () => import(`@/views/${menu.component}.vue`) : PluginView,
     // 直接把 remote 透传为组件 props
     props: {
       pluginName: menu.component,

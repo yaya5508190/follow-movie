@@ -56,7 +56,7 @@
           density="compact"
           :icons="['mdi-weather-night', 'mdi-white-balance-sunny']"
           style="margin: 1em;"
-          @click="theme.toggle()"
+          @click="theme.cycle(['lightTheme', 'darkTheme'])"
         />
         <v-text-field
           v-model="searchKeyword"
@@ -72,7 +72,6 @@
         />
       </template>
     </v-app-bar>
-
     <v-main>
       <RouterView v-slot="{ Component, route }">
         <component :is="Component" :key="route.fullPath" />

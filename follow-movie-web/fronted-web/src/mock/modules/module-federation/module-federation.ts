@@ -10,6 +10,9 @@ export default function setup () {
       ],
       menus: [
         { name: '微应用页面1', path: '/remote1', component: 'remote/App', parent: false, children: [] },
+        { name: '系统管理', path: '', component: '', parent: true, children: [
+          { name: '应用设置', path: '/app-setting', local: true, component: 'AppSetting', parent: false, children: [] },
+        ] },
       ],
       components: [
         {
