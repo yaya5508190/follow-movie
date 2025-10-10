@@ -54,7 +54,7 @@
       <template #append>
         <toggle-icon-button
           density="compact"
-          :icons="['mdi-weather-night', 'mdi-white-balance-sunny']"
+          :icons="['mdi-white-balance-sunny','mdi-weather-night']"
           style="margin: 1em;"
           @click="theme.cycle(['lightTheme', 'darkTheme'])"
         />
