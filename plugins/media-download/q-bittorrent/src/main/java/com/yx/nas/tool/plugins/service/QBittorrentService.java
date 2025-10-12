@@ -1,7 +1,8 @@
 package com.yx.nas.tool.plugins.service;
 
-import com.yx.nas.entity.DownloadToolInfo;
-import com.yx.nas.repository.DownloadToolInfoRepository;
+import com.yx.nas.entity.DownloadToolConfig;
+import com.yx.nas.repository.DownloadToolConfigRepository;
+import com.yx.nas.tool.plugins.MediaDownloadPluginConfig;
 import com.yx.nas.tool.plugins.common.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -16,22 +17,25 @@ import java.util.Objects;
 @Service
 public class QBittorrentService {
     private final OkHttpClient okHttpClient;
-    private final DownloadToolInfoRepository downloadToolInfoRepository;
+    private final DownloadToolConfigRepository downloadToolConfigRepository;
     private final CommonService commonService;
+    private final MediaDownloadPluginConfig mediaDownloadPluginConfig;
     private String cookie; // 保存登录后的 cookie
 
     public QBittorrentService(OkHttpClient okHttpClient,
-                              DownloadToolInfoRepository downloadToolInfoRepository,
-                              CommonService commonService) {
+                              DownloadToolConfigRepository downloadToolConfigRepository,
+                              CommonService commonService,
+                              MediaDownloadPluginConfig mediaDownloadPluginConfig) {
         this.okHttpClient = okHttpClient;
-        this.downloadToolInfoRepository = downloadToolInfoRepository;
+        this.downloadToolConfigRepository = downloadToolConfigRepository;
         this.commonService = commonService;
+        this.mediaDownloadPluginConfig = mediaDownloadPluginConfig;
     }
 
     /**
      * 登录 qBittorrent
      */
-    private boolean login(DownloadToolInfo config) {
+    private boolean login(DownloadToolConfig config) {
         try {
             log.info("尝试登录 qBittorrent: {}", config.url());
 
@@ -69,8 +73,8 @@ public class QBittorrentService {
         }
     }
 
-    public boolean downloadResource(Long mediaTorrentRecordId) {
-        return commonService.resolveDownloadTask(mediaTorrentRecordId, this::createDownloadTask);
+    public boolean downloadResource(Long mediaTorrentRecordId, Long targetDownloaderId) {
+        return commonService.resolveDownloadTask(mediaTorrentRecordId, targetDownloaderId, this::createDownloadTask);
     }
 
     /**
@@ -79,10 +83,10 @@ public class QBittorrentService {
      * @param torrentPath 种子文件路径
      * @return 是否创建成功
      */
-    private boolean createDownloadTask(String torrentPath) {
+    private boolean createDownloadTask(String torrentPath, Long targetDownloaderId) {
         try {
             //查询配置
-            DownloadToolInfo config = queryDownloadToolInfo();
+            DownloadToolConfig config = queryDownloadToolInfo(targetDownloaderId);
             if (config == null) {
                 log.error("未配置下载工具");
                 return false;
@@ -130,7 +134,7 @@ public class QBittorrentService {
                 } else if (response.code() == 403 || responseBody.contains("Forbidden")) {
                     log.info("Cookie 可能已过期，尝试重新登录");
                     if (login(config)) {
-                        return createDownloadTask(torrentPath);
+                        return createDownloadTask(torrentPath, targetDownloaderId);
                     } else {
                         return false;
                     }
@@ -147,9 +151,8 @@ public class QBittorrentService {
 
     /**
      * 查询下载工具配置
-     * TODO: 后续根据配置查询不同的下载工具,先写死
      */
-    private DownloadToolInfo queryDownloadToolInfo() {
-        return downloadToolInfoRepository.findByIdAndType(1L, 1);
+    private DownloadToolConfig queryDownloadToolInfo(Long targetDownloaderId) {
+        return downloadToolConfigRepository.findByIdAndType(targetDownloaderId, mediaDownloadPluginConfig.name());
     }
 }

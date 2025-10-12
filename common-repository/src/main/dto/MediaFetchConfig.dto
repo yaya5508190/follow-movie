@@ -1,0 +1,21 @@
+export com.yx.nas.entity.MediaFetchConfig
+    -> package com.yx.nas.dto
+
+ApiKeyMediaFetchConfig {
+    id
+    apiKey
+    fetcherSource
+}
+
+UserNamePasswordMediaFetchConfig {
+    id
+    userName
+    password
+    fetcherSource
+}
+
+CookieMediaFetchConfig {
+    id
+    authCookie
+    fetcherSource
+}

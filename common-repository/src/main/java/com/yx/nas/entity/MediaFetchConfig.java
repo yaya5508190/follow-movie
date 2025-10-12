@@ -1,10 +1,10 @@
 package com.yx.nas.entity;
 
-import java.time.LocalDateTime;
-
 import com.yx.nas.entity.base.BaseEntity;
 import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.*;
+
+import java.util.List;
 
 
 /**
@@ -16,8 +16,8 @@ import org.babyfish.jimmer.sql.*;
  * @date 2025-10-07
  */
 @Entity
-@Table(name = "media_fetch_auth")
-public interface MediaFetchAuth extends BaseEntity {
+@Table(name = "media_fetch_config")
+public interface MediaFetchConfig extends BaseEntity {
 
     /**
      * id
@@ -71,5 +71,17 @@ public interface MediaFetchAuth extends BaseEntity {
     @Column(name = "extra_metainfo")
     @Nullable
     String extraMetainfo();
+
+    /**
+     * 关联的下载工具配置
+     */
+    @ManyToOne
+    @JoinTable(
+            name = "media_fetch_download_rel",
+            joinColumnName = "download_tool_id",
+            inverseJoinColumnName = "media_fetch_id"
+    )
+    @Nullable
+    DownloadToolConfig downloadToolConfigs();
 
 }

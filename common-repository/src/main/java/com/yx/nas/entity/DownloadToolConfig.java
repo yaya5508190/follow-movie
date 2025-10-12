@@ -1,9 +1,10 @@
 package com.yx.nas.entity;
 
 import com.yx.nas.entity.base.BaseEntity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.*;
+
+import java.util.List;
 
 
 /**
@@ -15,8 +16,8 @@ import org.babyfish.jimmer.sql.*;
  * @date 2025-10-08
  */
 @Entity
-@Table(name = "download_tool_info")
-public interface DownloadToolInfo extends BaseEntity {
+@Table(name = "download_tool_config")
+public interface DownloadToolConfig extends BaseEntity {
 
     /**
      * id主键
@@ -37,9 +38,9 @@ public interface DownloadToolInfo extends BaseEntity {
     int authType();
 
     /**
-     * 工具类型 1: qbittorrent
+     * 工具类型 q-bittorrent
      */
-    int type();
+    String type();
 
     /**
      * 访问地址
@@ -69,4 +70,17 @@ public interface DownloadToolInfo extends BaseEntity {
      */
     @Column(name = "save_path")
     String savePath();
+
+    /**
+     * 是否默认
+     */
+    @Column(name = "default_tool")
+    boolean defaultTool();
+
+    @OneToMany(mappedBy = "downloadToolConfigs",
+            orderedProps = {
+                    @OrderedProp("fetcherSource")
+            }
+    )
+    List<MediaFetchConfig> mediaFetchConfigs();
 }

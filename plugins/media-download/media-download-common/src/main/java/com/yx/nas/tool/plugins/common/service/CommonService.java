@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Service
@@ -36,7 +37,7 @@ public class CommonService {
      * @param torrentRecordId 资源id
      * @param downloadLogic   下载逻辑,传入的string为种子文件本地临时路径
      */
-    public boolean resolveDownloadTask(Long torrentRecordId, Function<String, Boolean> downloadLogic) {
+    public boolean resolveDownloadTask(Long torrentRecordId, Long targetDownloaderId, BiFunction<String, Long, Boolean> downloadLogic) {
         MediaTorrentRecord torrentRecord = mediaTorrentRecordRepository.findById(torrentRecordId);
         if (torrentRecord == null) {
             log.error("种子记录不存在，id: {}", torrentRecordId);
@@ -87,7 +88,10 @@ public class CommonService {
                 log.info("种子下载到临时文件: {}, 大小: {} bytes", tempFile.toAbsolutePath(), bytes.length);
 
                 // 执行下载逻辑
-                boolean downloadSuccess = downloadLogic.apply(tempFile.toAbsolutePath().toString());
+                boolean downloadSuccess = downloadLogic.apply(
+                        tempFile.toAbsolutePath().toString(),
+                        targetDownloaderId
+                );
                 if (downloadSuccess) {
                     log.info("种子下载成功，id: {}", torrentRecordId);
                 } else {

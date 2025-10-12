@@ -15,6 +15,6 @@ public class QBittorrentServiceTest {
 
     @Test
     void downloadResourceTest(){
-        qBittorrentService.downloadResource(17L);
+        qBittorrentService.downloadResource(17L,1L);
     }
 }

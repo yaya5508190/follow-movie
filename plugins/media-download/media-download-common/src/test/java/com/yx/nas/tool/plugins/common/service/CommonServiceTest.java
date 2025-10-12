@@ -3,10 +3,8 @@ package com.yx.nas.tool.plugins.common.service;
 import com.yx.nas.repository.MediaTorrentRecordRepository;
 import com.yx.nas.tool.plugins.common.CommonApplication;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
 /**
@@ -26,10 +24,10 @@ class CommonServiceTest {
 
     @Test
     void testResolveDownloadTaskSuccess() {
-        commonService.resolveDownloadTask(17L, this::testDownload);
+        commonService.resolveDownloadTask(17L, 1L, this::testDownload);
     }
 
-    public boolean testDownload(String torrentPath) {
+    public boolean testDownload(String torrentPath, Long targetDownloaderId) {
         return true;
     }
 }

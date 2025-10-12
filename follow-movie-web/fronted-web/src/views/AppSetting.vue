@@ -13,7 +13,7 @@
               </div>
             </div>
           </v-card-item>
-          <div style="padding: 0 8px;">
+          <div class="setting-card-button">
             <v-btn
               block
               class=" mb-1 align-center"
@@ -23,7 +23,7 @@
               variant="flat"
             >
               <template #prepend>
-                <v-icon style="padding-top: 2px" />
+                <v-icon class="setting-card-icon" />
               </template>
               添加
             </v-btn>
@@ -38,11 +38,11 @@
           <v-card-item>
             <div>
               <div class="text-overline mb-0">
-                <span class="setting-card-title">站点设置(必须配置)</span>
+                <span class="setting-card-title">站点设置</span>
               </div>
             </div>
           </v-card-item>
-          <div style="padding: 0 8px;">
+          <div class="setting-card-button">
             <v-btn
               block
               class=" mb-1 align-center "
@@ -52,7 +52,7 @@
               variant="flat"
             >
               <template #prepend>
-                <v-icon style="padding-top: 2px" />
+                <v-icon class="setting-card-icon" />
               </template>
               添加
             </v-btn>
@@ -71,44 +71,17 @@
               </div>
             </div>
           </v-card-item>
-          <div style="padding: 0 8px;">
+          <div class="setting-card-button">
             <v-btn
               block
               class=" mb-1 align-center "
               color="grey-3"
               prepend-icon="mdi-folder"
+              size="30"
               variant="flat"
             >
               <template #prepend>
-                <v-icon style="padding-top: 2px" />
-              </template>
-              媒体文件夹
-            </v-btn>
-          </div>
-          <div style="padding: 0 8px;">
-            <v-btn
-              block
-              class=" mb-1 align-center "
-              color="grey-3"
-              prepend-icon="mdi-folder"
-              variant="flat"
-            >
-              <template #prepend>
-                <v-icon style="padding-top: 2px" />
-              </template>
-              媒体文件夹
-            </v-btn>
-          </div>
-          <div style="padding: 0 8px;">
-            <v-btn
-              block
-              class=" mb-1 align-center "
-              color="grey-3"
-              prepend-icon="mdi-folder"
-              variant="flat"
-            >
-              <template #prepend>
-                <v-icon style="padding-top: 2px" />
+                <v-icon class="setting-card-icon" />
               </template>
               媒体文件夹
             </v-btn>
@@ -120,7 +93,7 @@
 </template>
 
 <script lang="ts" setup>
-  //
+//
 </script>
 
 <style scoped>
@@ -130,5 +103,13 @@
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.setting-card-button {
+  padding: 0 8px;
+}
+
+.setting-card-icon {
+  padding-top: 2px;
 }
 </style>

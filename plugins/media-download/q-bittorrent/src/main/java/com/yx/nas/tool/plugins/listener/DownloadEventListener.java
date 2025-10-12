@@ -24,7 +24,7 @@ public class DownloadEventListener {
         log.info("Received download event: {}", event);
 
         if(mediaDownloadPluginConfig.name().equals(event.getTargetDownloader())){
-            if(qBittorrentService.downloadResource(event.getMediaTorrentRecordId())){
+            if(qBittorrentService.downloadResource(event.getMediaTorrentRecordId(),event.getTargetDownloaderId())){
                 log.info("资源下载任务成功创建，id: {}", event.getMediaTorrentRecordId());
             }else {
                 log.error("资源下载任务创建失败，id: {}", event.getMediaTorrentRecordId());

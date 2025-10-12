@@ -7,11 +7,12 @@ import com.yx.framework.spider.fetch.Fetcher;
 import com.yx.framework.spider.model.Page;
 import com.yx.framework.spider.model.SpiderRequest;
 import com.yx.nas.api.MediaResourceFetcher;
+import com.yx.nas.dto.ApiKeyMediaFetchConfig;
 import com.yx.nas.enums.AuthTypeEnum;
 import com.yx.nas.model.common.PageResult;
 import com.yx.nas.model.dto.MediaResourceDto;
 import com.yx.nas.model.vo.MediaResourcePageReqVo;
-import com.yx.nas.repository.MediaFetchAuthRepository;
+import com.yx.nas.repository.MediaFetchConfigRepository;
 import com.yx.nas.tool.plugins.MediaFetchPluginConfig;
 import com.yx.nas.tool.plugins.model.vo.MTeamMediaResourceReqVo;
 import com.yx.nas.tool.plugins.service.helper.MediaResourceFetcherHelper;
@@ -27,15 +28,15 @@ import java.util.Optional;
 public class MediaResourceFetcherImpl implements MediaResourceFetcher {
     private final Fetcher fetcher;
     private final JsonParserEngine parserEngine;
-    private final MediaFetchAuthRepository mediaFetchAuthRepository;
+    private final MediaFetchConfigRepository mediaFetchConfigRepository;
     private final MediaFetchPluginConfig mediaFetchPluginConfig;
 
     public MediaResourceFetcherImpl(Fetcher fetcher,
                                     JsonParserEngine parserEngine,
-                                    MediaFetchAuthRepository mediaFetchAuthRepository,
+                                    MediaFetchConfigRepository mediaFetchConfigRepository,
                                     MediaFetchPluginConfig mediaFetchPluginConfig
     ) {
-        this.mediaFetchAuthRepository = mediaFetchAuthRepository;
+        this.mediaFetchConfigRepository = mediaFetchConfigRepository;
         this.mediaFetchPluginConfig = mediaFetchPluginConfig;
         this.fetcher = fetcher;
         this.parserEngine = parserEngine;
@@ -51,10 +52,15 @@ public class MediaResourceFetcherImpl implements MediaResourceFetcher {
     public PageResult<MediaResourceDto> search(MediaResourcePageReqVo reqVo) throws Exception {
         String url = "https://api.m-team.cc/api/torrent/search";
         // 从系统配置获取API Key
-        String apiKey = mediaFetchAuthRepository.findBySourceAndType(
+        ApiKeyMediaFetchConfig apiKeyMediaFetchConfig = mediaFetchConfigRepository.findBySourceAndType(
                 mediaFetchPluginConfig.name(),
                 AuthTypeEnum.API_KEY.getCode()
-        ).toEntity().apiKey();
+        );
+        if (apiKeyMediaFetchConfig == null) {
+            throw new IllegalArgumentException("未发现M-Team配置，请先配置M-Team");
+        }
+
+        String apiKey = apiKeyMediaFetchConfig.getApiKey();
 
         if (StringUtils.isNotBlank(apiKey)) {
             MTeamMediaResourceReqVo mTeamMediaResourceReqVo = MediaResourceFetcherHelper.buildMTeamMediaResourceReqVo(reqVo);

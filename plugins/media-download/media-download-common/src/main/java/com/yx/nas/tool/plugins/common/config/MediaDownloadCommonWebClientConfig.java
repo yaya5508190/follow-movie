@@ -42,9 +42,11 @@ public class MediaDownloadCommonWebClientConfig {
                         .maxInMemorySize(16 * 1024 * 1024)) // 16MB
                 .build();
 
-        return WebClient.builder()
+        WebClient webClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .exchangeStrategies(strategies)
                 .build();
+
+        return webClient;
     }
 }

@@ -1,0 +1,11 @@
+export com.yx.nas.entity.DownloadToolConfig
+    -> package com.yx.nas.dto
+
+DownloadToolConfigView {
+
+    #allScalars
+
+    mediaFetchConfigs {
+        #allScalars
+    }
+}

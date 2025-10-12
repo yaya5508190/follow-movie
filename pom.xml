@@ -15,6 +15,7 @@
         <jimmer.version>0.9.111</jimmer.version>
         <lombok.version>1.18.30</lombok.version>
         <commons-lang3.version>3.18.0</commons-lang3.version>
+        <logback.version>1.5.19</logback.version>
         <postgresql.version>42.7.4</postgresql.version>
         <okhttp.version>4.12.0</okhttp.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,6 +53,11 @@
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
                 <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
             </dependency>
         </dependencies>
 	</dependencyManagement>

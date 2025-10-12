@@ -1,7 +1,6 @@
 package com.yx.nas.tool.context;
 
 import com.yx.nas.model.event.DownloadEvent;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
