@@ -22,6 +22,15 @@
               size="30"
               variant="flat"
             >
+              <v-menu activator="parent">
+                <v-list>
+                  <v-list-item
+                    value="q-bittorrent"
+                  >
+                    <v-list-item-title>Q-Bittorrent</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
               <template #prepend>
                 <v-icon class="setting-card-icon" />
               </template>
@@ -51,6 +60,18 @@
               size="30"
               variant="flat"
             >
+              <v-menu activator="parent">
+                <v-list>
+                  <v-list-item
+                    v-for="(setting, index) in mediaResourceFetcherSettings"
+                    :key="index"
+                    :value="setting.component"
+                    @click="() => openSettingDialog(setting,'insert')"
+                  >
+                    <v-list-item-title>{{ setting.meta }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
               <template #prepend>
                 <v-icon class="setting-card-icon" />
               </template>
@@ -89,11 +110,46 @@
         </v-card>
       </v-col>
     </v-row>
+    <!-- 新增：弹窗内容 -->
+    <v-dialog v-model="settingDialog" max-width="800px" persistent scrollable>
+      <PluginView
+        v-if="currentSetting"
+        :action="currentAction"
+        :plugin-name="currentSetting.component"
+        @dialog:close="closeSettingDialog"
+      />
+    </v-dialog>
   </v-container>
 </template>
 
 <script lang="ts" setup>
-//
+  import type { PluginComponent } from '@/types/module-federation.ts'
+  import { computed, ref } from 'vue'
+  import { useModuleFederation } from '@/stores/module-federation.ts'
+
+  const moduleFederation = useModuleFederation()
+  const mediaResourceFetcherSettings = computed<PluginComponent[]>(() => {
+    return moduleFederation.mfConfig.components.filter(
+      component => component.type === 'mediaResourceFetcherSetting',
+    )
+  })
+
+  // 新增：弹窗控制和当前setting
+  const settingDialog = ref(false)
+  const currentSetting = ref<PluginComponent | null>(null)
+  const currentAction = ref<'insert' | 'update'>('insert')
+
+  // 打开弹窗
+  const openSettingDialog = (setting: PluginComponent, action: 'insert' | 'update') => {
+    currentSetting.value = setting
+    currentAction.value = action
+    settingDialog.value = true
+  }
+  // 关闭弹窗
+  const closeSettingDialog = () => {
+    settingDialog.value = false
+    currentSetting.value = null
+  }
 </script>
 
 <style scoped>

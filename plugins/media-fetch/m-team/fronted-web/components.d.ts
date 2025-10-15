@@ -10,5 +10,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     MediaCard: typeof import('./src/components/media-card.vue')['default']
     MediaResourceFetcher: typeof import('./src/pages/media-resource-fetcher.vue')['default']
+    MediaResourceFetcherSetting: typeof import('./src/pages/media-resource-fetcher-setting.vue')['default']
   }
 }

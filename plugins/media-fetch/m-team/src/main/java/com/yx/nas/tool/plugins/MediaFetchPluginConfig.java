@@ -5,7 +5,6 @@ import api.PluginConfig;
 import com.google.auto.service.AutoService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -36,7 +35,8 @@ public class MediaFetchPluginConfig implements PluginConfig {
     @Override
     public List<PluginComponent> pluginComponents() {
         return List.of(
-                new PluginComponent(pluginId(), "mediaResourceFetcher", "m-team 馒头", "App", "m-team影视资源")
+                new PluginComponent(pluginId(), "mediaResourceFetcher", "m-team 馒头", "App", "m-team影视资源"),
+                new PluginComponent(pluginId(), "mediaResourceFetcherSetting", "m-team 馒头设置", "App-Setting", "m-team影视资源")
         );
     }
 }

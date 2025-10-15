@@ -23,6 +23,14 @@ export default function setup () {
           component: 'remote/App',
           desc: '',
         },
+        {
+          pluginId: '0fb0cde6-545c-4172-82b8-d2404dbbfb51',
+          type: 'mediaResourceFetcherSetting',
+          meta: '馒头(M-Team)',
+          componentName: 'App-Setting',
+          component: 'remote/App-Setting',
+          desc: '',
+        },
       ],
     } satisfies MFConfig
   })

@@ -51,7 +51,8 @@ export default defineConfig({
     federation({
       name: 'm-team-resource-fetcher',
       exposes: {
-        './App': './src/exposes/mount.ts',
+        './App': './src/exposes/app/mount.ts',
+        './App-Setting': './src/exposes/app-setting/mount.ts',
       },
       filename: 'remoteEntry.js',
       manifest: true,
@@ -101,8 +102,8 @@ export default defineConfig({
       },
     },
   },
-  base: '/0fb0cde6-545c-4172-82b8-d2404dbbfb51/',
-  // base: '/',
+  // base: '/0fb0cde6-545c-4172-82b8-d2404dbbfb51/',
+  base: '/',
   build: {
     target: 'esnext' ,
     // minify: false,
