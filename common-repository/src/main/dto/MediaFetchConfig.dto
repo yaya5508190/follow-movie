@@ -3,12 +3,16 @@ export com.yx.nas.entity.MediaFetchConfig
 
 ApiKeyMediaFetchConfig {
     id
+    name
+    url,
     apiKey
     fetcherSource
 }
 
 UserNamePasswordMediaFetchConfig {
     id
+    name
+    url,
     userName
     password
     fetcherSource
@@ -16,6 +20,17 @@ UserNamePasswordMediaFetchConfig {
 
 CookieMediaFetchConfig {
     id
+    name
+    url,
     authCookie
+    fetcherSource
+}
+
+input ApiKeyMediaFetchConfigInput {
+    id
+    name
+    url
+    apiKey
+    authType
     fetcherSource
 }

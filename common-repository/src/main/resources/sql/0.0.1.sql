@@ -8,6 +8,7 @@ create table media_fetch_config
 (
     id             BIGSERIAL     not null,
     name           VARCHAR(150)  not null,
+    url            VARCHAR(255)  not null,
     api_key        VARCHAR(150)  null,
     user_name      VARCHAR(150)  null,
     password       VARCHAR(150)  null,
@@ -26,9 +27,11 @@ comment on table media_fetch_config is
 comment on column media_fetch_config.name is
     '站点名称';
 
+comment on column media_fetch_config.url is
+    '站点URL';
+
 comment on column media_fetch_config.api_key is
-    '访问密钥
-    ';
+    '访问密钥';
 
 comment on column media_fetch_config.user_name is
     '访问用户名';

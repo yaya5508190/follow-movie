@@ -4,8 +4,6 @@ import com.yx.nas.entity.base.BaseEntity;
 import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.*;
 
-import java.util.List;
-
 
 /**
  * <p>
@@ -25,6 +23,19 @@ public interface MediaFetchConfig extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
+
+    /**
+     * 站点名称
+     */
+    @Column(name = "name")
+    String name();
+
+
+    /**
+     * 访问密钥
+     */
+    @Column(name = "url")
+    String url();
 
     /**
      * 访问密钥

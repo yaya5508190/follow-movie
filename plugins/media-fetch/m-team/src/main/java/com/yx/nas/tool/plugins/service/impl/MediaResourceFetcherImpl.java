@@ -14,6 +14,7 @@ import com.yx.nas.model.dto.MediaResourceDto;
 import com.yx.nas.model.vo.MediaResourcePageReqVo;
 import com.yx.nas.repository.MediaFetchConfigRepository;
 import com.yx.nas.tool.plugins.MediaFetchPluginConfig;
+import com.yx.nas.tool.plugins.constant.FetchURLConstant;
 import com.yx.nas.tool.plugins.model.vo.MTeamMediaResourceReqVo;
 import com.yx.nas.tool.plugins.service.helper.MediaResourceFetcherHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +51,6 @@ public class MediaResourceFetcherImpl implements MediaResourceFetcher {
     @Override
     @SuppressWarnings("unchecked")
     public PageResult<MediaResourceDto> search(MediaResourcePageReqVo reqVo) throws Exception {
-        String url = "https://api.m-team.cc/api/torrent/search";
         // 从系统配置获取API Key
         ApiKeyMediaFetchConfig apiKeyMediaFetchConfig = mediaFetchConfigRepository.findBySourceAndType(
                 mediaFetchPluginConfig.name(),
@@ -60,8 +60,9 @@ public class MediaResourceFetcherImpl implements MediaResourceFetcher {
             throw new IllegalArgumentException("未发现M-Team配置，请先配置M-Team");
         }
 
+        // 构建请求URL
+        String url = apiKeyMediaFetchConfig.getUrl() + FetchURLConstant.SEARCH_TORRENT;
         String apiKey = apiKeyMediaFetchConfig.getApiKey();
-
         if (StringUtils.isNotBlank(apiKey)) {
             MTeamMediaResourceReqVo mTeamMediaResourceReqVo = MediaResourceFetcherHelper.buildMTeamMediaResourceReqVo(reqVo);
             Page fetchPage = fetcher.fetch(SpiderRequest.post(url, Map.ofEntries(

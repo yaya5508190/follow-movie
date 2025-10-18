@@ -18,6 +18,7 @@ import com.yx.nas.repository.DownloadToolConfigRepository;
 import com.yx.nas.repository.MediaFetchConfigRepository;
 import com.yx.nas.repository.MediaTorrentRecordRepository;
 import com.yx.nas.tool.plugins.MediaFetchPluginConfig;
+import com.yx.nas.tool.plugins.constant.FetchURLConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
@@ -70,7 +71,6 @@ public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentD
 
     @Override
     public boolean downloadTorrent(String resourceId) throws Exception {
-        String url = "https://api.m-team.cc/api/torrent/genDlToken";
         // 从系统配置获取API Key
         ApiKeyMediaFetchConfig apiKeyMediaFetchConfig = mediaFetchConfigRepository.findBySourceAndType(
                 mediaFetchPluginConfig.name(),
@@ -79,6 +79,7 @@ public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentD
         if (apiKeyMediaFetchConfig == null) {
             throw new IllegalArgumentException("未发现M-Team配置，请先配置M-Team");
         }
+        String url = apiKeyMediaFetchConfig.getUrl() + FetchURLConstant.DOWNLOAD_TORRENT;
         String apiKey = apiKeyMediaFetchConfig.getApiKey();
         Long mediaFetchConfigId = apiKeyMediaFetchConfig.getId();
 
