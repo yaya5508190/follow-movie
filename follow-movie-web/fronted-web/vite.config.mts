@@ -99,6 +99,13 @@ export default defineConfig({
   server: {
     port: 3000,
     host: '0.0.0.0',
+    proxy: {
+      // 以 /api 开头的请求转发到后端
+      '/api': {
+        target: 'http://127.0.0.1:8080/', // 你的后端
+        changeOrigin: true, // 修改 Origin 为 target
+      },
+    },
   },
   css: {
     preprocessorOptions: {

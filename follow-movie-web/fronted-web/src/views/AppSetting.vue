@@ -77,6 +77,28 @@
               </template>
               添加
             </v-btn>
+
+            <!-- 展示已配置的站点列表 -->
+            <div v-if="loading" class="text-center pa-4">
+              <v-progress-circular color="primary" indeterminate />
+            </div>
+            <div v-else-if="fetcherSettings.length > 0">
+              <v-btn
+                v-for="config in fetcherSettings"
+                :key="config.id"
+                block
+                class="mb-1 align-center"
+                color="grey-3"
+                size="30"
+                variant="flat"
+                @click="() => handleEditSetting(config)"
+              >
+                {{ config.name }}
+              </v-btn>
+            </div>
+            <div v-else class="text-center pa-4 text-grey">
+              暂无站点配置
+            </div>
           </div>
         </v-card>
       </v-col>
@@ -123,8 +145,10 @@
 </template>
 
 <script lang="ts" setup>
+  import type { BasicMediaFetchConfig } from '@/types/media-fetch-config.ts'
   import type { PluginComponent } from '@/types/module-federation.ts'
-  import { computed, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
+  import { queryAllFetcherSettings } from '@/api/media-fetch-config.ts'
   import { useModuleFederation } from '@/stores/module-federation.ts'
 
   const moduleFederation = useModuleFederation()
@@ -139,17 +163,55 @@
   const currentSetting = ref<PluginComponent | null>(null)
   const currentAction = ref<'insert' | 'update'>('insert')
 
+  // 新增：站点配置列表和加载状态
+  const fetcherSettings = ref<BasicMediaFetchConfig[]>([])
+  const loading = ref(false)
+
+  // 加载站点配置列表
+  const loadFetcherSettings = async () => {
+    loading.value = true
+    try {
+      const result = await queryAllFetcherSettings()
+      if (result.code === 10_000) {
+        fetcherSettings.value = result.data
+      }
+    } catch (error) {
+      console.error('加载站点配置失败:', error)
+    } finally {
+      loading.value = false
+    }
+  }
+
   // 打开弹窗
   const openSettingDialog = (setting: PluginComponent, action: 'insert' | 'update') => {
     currentSetting.value = setting
     currentAction.value = action
     settingDialog.value = true
   }
+
   // 关闭弹窗
   const closeSettingDialog = () => {
     settingDialog.value = false
     currentSetting.value = null
+    // 重新加载列表
+    loadFetcherSettings()
   }
+
+  // 编辑站点配置
+  const handleEditSetting = (config: BasicMediaFetchConfig) => {
+    // 根据 fetcherSource 找到对应的 setting
+    const setting = mediaResourceFetcherSettings.value.find(
+      s => s.pluginId === config.pluginId,
+    )
+    if (setting) {
+      openSettingDialog(setting, 'update')
+    }
+  }
+
+  // 组件挂载时加载数据
+  onMounted(() => {
+    loadFetcherSettings()
+  })
 </script>
 
 <style scoped>
