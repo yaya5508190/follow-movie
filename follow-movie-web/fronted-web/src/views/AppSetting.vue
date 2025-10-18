@@ -52,6 +52,27 @@
             </div>
           </v-card-item>
           <div class="setting-card-button">
+            <!-- 展示已配置的站点列表 -->
+            <div v-if="loading" class="text-center pa-4">
+              <v-progress-circular color="primary" indeterminate />
+            </div>
+            <v-list v-else-if="fetcherSettings.length > 0" bg-color="transparent" class="pa-0">
+              <v-list-item
+                v-for="config in fetcherSettings"
+                :key="config.id"
+                class="mb-1 rounded"
+                color="grey-3"
+                @click="() => handleEditSetting(config)"
+              >
+                <v-list-item-title>{{ config.name }}</v-list-item-title>
+                <template #append>
+                  <v-icon icon="mdi-chevron-right" size="small" />
+                </template>
+              </v-list-item>
+            </v-list>
+            <div v-else class="text-center pa-4 text-grey">
+              暂无站点配置
+            </div>
             <v-btn
               block
               class=" mb-1 align-center "
@@ -77,28 +98,6 @@
               </template>
               添加
             </v-btn>
-
-            <!-- 展示已配置的站点列表 -->
-            <div v-if="loading" class="text-center pa-4">
-              <v-progress-circular color="primary" indeterminate />
-            </div>
-            <div v-else-if="fetcherSettings.length > 0">
-              <v-btn
-                v-for="config in fetcherSettings"
-                :key="config.id"
-                block
-                class="mb-1 align-center"
-                color="grey-3"
-                size="30"
-                variant="flat"
-                @click="() => handleEditSetting(config)"
-              >
-                {{ config.name }}
-              </v-btn>
-            </div>
-            <div v-else class="text-center pa-4 text-grey">
-              暂无站点配置
-            </div>
           </div>
         </v-card>
       </v-col>
