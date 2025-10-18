@@ -52,8 +52,8 @@ public class MediaResourceFetcherImpl implements MediaResourceFetcher {
     @SuppressWarnings("unchecked")
     public PageResult<MediaResourceDto> search(MediaResourcePageReqVo reqVo) throws Exception {
         // 从系统配置获取API Key
-        ApiKeyMediaFetchConfig apiKeyMediaFetchConfig = mediaFetchConfigRepository.findBySourceAndType(
-                mediaFetchPluginConfig.name(),
+        ApiKeyMediaFetchConfig apiKeyMediaFetchConfig = mediaFetchConfigRepository.findByPluginIdAndType(
+                mediaFetchPluginConfig.pluginId(),
                 AuthTypeEnum.API_KEY.getCode()
         );
         if (apiKeyMediaFetchConfig == null) {

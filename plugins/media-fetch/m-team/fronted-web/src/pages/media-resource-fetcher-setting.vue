@@ -29,6 +29,7 @@ const formData = ref({
   apiKey: '',
   authType: 1,
   fetcherSource: 'm-team',
+  pluginId: '',
 })
 
 // 表单校验规则
@@ -84,6 +85,7 @@ const getSetting = async () => {
         apiKey: data.apiKey || '',
         authType: data.authType || 1,
         fetcherSource: data.fetcherSource || 'm-team',
+        pluginId: data.pluginId,
       }
     } else {
       console.error('获取配置失败:', response.data.message)

@@ -16,6 +16,7 @@ create table media_fetch_config
     auth_type      INT2          null     default 1,
     fetcher_source VARCHAR(150)  not null,
     extra_metainfo JSONB         null,
+    plugin_id      VARCHAR(64)   not null,
     create_time    TIMESTAMP     not null default CURRENT_TIMESTAMP,
     update_time    TIMESTAMP     null,
     constraint PK_MEDIA_FETCH_CONFIG primary key (id)
@@ -50,6 +51,9 @@ comment on column media_fetch_config.fetcher_source is
 
 comment on column media_fetch_config.extra_metainfo is
     '额外元数据';
+
+comment on column media_fetch_config.plugin_id is
+    '插件id';
 
 comment on column media_fetch_config.create_time is
     '创建时间';

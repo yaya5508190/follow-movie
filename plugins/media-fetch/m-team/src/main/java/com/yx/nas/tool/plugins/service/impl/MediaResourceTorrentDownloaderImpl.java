@@ -72,8 +72,8 @@ public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentD
     @Override
     public boolean downloadTorrent(String resourceId) throws Exception {
         // 从系统配置获取API Key
-        ApiKeyMediaFetchConfig apiKeyMediaFetchConfig = mediaFetchConfigRepository.findBySourceAndType(
-                mediaFetchPluginConfig.name(),
+        ApiKeyMediaFetchConfig apiKeyMediaFetchConfig = mediaFetchConfigRepository.findByPluginIdAndType(
+                mediaFetchPluginConfig.pluginId(),
                 AuthTypeEnum.API_KEY.getCode()
         );
         if (apiKeyMediaFetchConfig == null) {

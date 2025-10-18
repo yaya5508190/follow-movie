@@ -34,8 +34,8 @@ public class MediaResourceFetcherSettingImpl {
     @Transactional
     public CommonResult<Void> saveSetting(ApiKeyMediaFetchConfigInput config) {
         //校验同FetcherSource的配置是否存在
-        ApiKeyMediaFetchConfig existingConfig = mediaFetchConfigRepository.findBySourceAndType(
-                mediaFetchPluginConfig.name(),
+        ApiKeyMediaFetchConfig existingConfig = mediaFetchConfigRepository.findByPluginIdAndType(
+                mediaFetchPluginConfig.pluginId(),
                 AuthTypeEnum.API_KEY.getCode()
         );
         if (existingConfig == null) {
@@ -43,6 +43,7 @@ public class MediaResourceFetcherSettingImpl {
             config.setId(null);
             config.setFetcherSource(mediaFetchPluginConfig.name());
             config.setAuthType(AuthTypeEnum.API_KEY.getCode());
+            config.setPluginId(mediaFetchPluginConfig.pluginId());
             mediaFetchConfigRepository.save(config);
             return CommonResult.success();
         } else {
@@ -63,8 +64,8 @@ public class MediaResourceFetcherSettingImpl {
      * @return 配置
      */
     public CommonResult<ApiKeyMediaFetchConfigInput> getSetting() {
-        ApiKeyMediaFetchConfig existingConfig = mediaFetchConfigRepository.findBySourceAndType(
-                mediaFetchPluginConfig.name(),
+        ApiKeyMediaFetchConfig existingConfig = mediaFetchConfigRepository.findByPluginIdAndType(
+                mediaFetchPluginConfig.pluginId(),
                 AuthTypeEnum.API_KEY.getCode()
         );
         if (existingConfig != null) {
@@ -73,6 +74,7 @@ public class MediaResourceFetcherSettingImpl {
             configInput.setName(existingConfig.getName());
             configInput.setFetcherSource(existingConfig.getFetcherSource());
             configInput.setUrl(existingConfig.getUrl());
+            configInput.setPluginId(mediaFetchPluginConfig.pluginId());
             configInput.setAuthType(AuthTypeEnum.API_KEY.getCode());
             configInput.setApiKey(existingConfig.getApiKey());
             return CommonResult.success(configInput);

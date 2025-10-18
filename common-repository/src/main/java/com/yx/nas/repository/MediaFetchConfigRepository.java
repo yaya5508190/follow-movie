@@ -1,6 +1,7 @@
 package com.yx.nas.repository;
 
 import com.yx.nas.dto.ApiKeyMediaFetchConfig;
+import com.yx.nas.dto.BasicMediaFetchConfig;
 import com.yx.nas.dto.CookieMediaFetchConfig;
 import com.yx.nas.dto.UserNamePasswordMediaFetchConfig;
 import com.yx.nas.entity.MediaFetchConfig;
@@ -11,6 +12,8 @@ import org.babyfish.jimmer.spring.repo.support.AbstractJavaRepository;
 import org.babyfish.jimmer.sql.JSqlClient;
 import org.babyfish.jimmer.sql.ast.Predicate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -33,7 +36,7 @@ public class MediaFetchConfigRepository extends AbstractJavaRepository<MediaFetc
      * 根据来源站点和认证类型查询认证信息
      */
     @SuppressWarnings("unchecked")
-    public <V extends View<MediaFetchConfig>> V findBySourceAndType(String fetcherSource, Integer ConfigType) {
+    public <V extends View<MediaFetchConfig>> V findByPluginIdAndType(String pluginId, Integer ConfigType) {
         Class<? extends View<MediaFetchConfig>> viewType = switch (AuthTypeEnum.fromCode(ConfigType)) {
             case API_KEY -> ApiKeyMediaFetchConfig.class;
             case USERNAME_PASSWORD -> UserNamePasswordMediaFetchConfig.class;
@@ -46,9 +49,16 @@ public class MediaFetchConfigRepository extends AbstractJavaRepository<MediaFetc
                 .where(
                         Predicate.and(
                                 table.authType().eq(ConfigType),
-                                table.fetcherSource().eq(fetcherSource)
+                                table.pluginId().eq(pluginId)
                         )
                 ).select(table.fetch((Class<V>) viewType)).fetchFirstOrNull();
+    }
+
+    public List<BasicMediaFetchConfig> queryAllFetcherSettings() {
+        return sql
+                .createQuery(table)
+                .select(table.fetch(BasicMediaFetchConfig.class))
+                .execute();
     }
 }
 

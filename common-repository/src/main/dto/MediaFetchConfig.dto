@@ -26,6 +26,13 @@ CookieMediaFetchConfig {
     fetcherSource
 }
 
+BasicMediaFetchConfig {
+    id
+    name
+    fetcherSource
+    pluginId
+}
+
 input ApiKeyMediaFetchConfigInput {
     id
     name
@@ -33,4 +40,5 @@ input ApiKeyMediaFetchConfigInput {
     apiKey
     authType
     fetcherSource
+    pluginId
 }

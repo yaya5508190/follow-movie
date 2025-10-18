@@ -84,6 +84,12 @@ public interface MediaFetchConfig extends BaseEntity {
     String extraMetainfo();
 
     /**
+     * 插件ID
+     */
+    @Column(name = "plugin_id")
+    String pluginId();
+
+    /**
      * 关联的下载工具配置
      */
     @ManyToOne
