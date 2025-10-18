@@ -67,7 +67,7 @@ public interface MediaFetchConfig extends BaseEntity {
      * 1:api_key 2: 用户名密码
      */
     @Column(name = "auth_type")
-    @Nullable
+    @Key
     Integer authType();
 
     /**
@@ -87,6 +87,7 @@ public interface MediaFetchConfig extends BaseEntity {
      * 插件ID
      */
     @Column(name = "plugin_id")
+    @Key
     String pluginId();
 
     /**

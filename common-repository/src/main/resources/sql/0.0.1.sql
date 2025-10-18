@@ -13,7 +13,7 @@ create table media_fetch_config
     user_name      VARCHAR(150)  null,
     password       VARCHAR(150)  null,
     auth_cookie    VARCHAR(3000) null,
-    auth_type      INT2          null     default 1,
+    auth_type      INT2          not null default 1,
     fetcher_source VARCHAR(150)  not null,
     extra_metainfo JSONB         null,
     plugin_id      VARCHAR(64)   not null,
@@ -60,6 +60,8 @@ comment on column media_fetch_config.create_time is
 
 comment on column media_fetch_config.update_time is
     '更新时间';
+
+create unique index u_plugin_id on media_fetch_config ( auth_type, plugin_id );
 
 /*==============================================================*/
 /* Table: media_torrent_record                                  */

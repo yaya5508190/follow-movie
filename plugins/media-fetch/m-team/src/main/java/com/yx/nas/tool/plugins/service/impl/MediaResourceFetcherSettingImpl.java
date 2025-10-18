@@ -33,29 +33,22 @@ public class MediaResourceFetcherSettingImpl {
      */
     @Transactional
     public CommonResult<Void> saveSetting(ApiKeyMediaFetchConfigInput config) {
-        //校验同FetcherSource的配置是否存在
-        ApiKeyMediaFetchConfig existingConfig = mediaFetchConfigRepository.findByPluginIdAndType(
-                mediaFetchPluginConfig.pluginId(),
-                AuthTypeEnum.API_KEY.getCode()
-        );
-        if (existingConfig == null) {
-            // 新增配置
-            config.setId(null);
-            config.setFetcherSource(mediaFetchPluginConfig.name());
-            config.setAuthType(AuthTypeEnum.API_KEY.getCode());
-            config.setPluginId(mediaFetchPluginConfig.pluginId());
-            mediaFetchConfigRepository.save(config);
-            return CommonResult.success();
-        } else {
-            // 更新配置首先比对id是否相同，如果不同说明不应该更新
-            if (Objects.equals(existingConfig.getId(), config.getId())) {
-                mediaFetchConfigRepository.save(config);
-                mediaFetchConfigRepository.save(config);
-                return CommonResult.success();
-            } else {
+        //如果id为空，说明是新增配置，如果可以查出数据直接返回数据已经存在的错误
+        if (Objects.isNull(config.getId())) {
+            ApiKeyMediaFetchConfig existingConfig = mediaFetchConfigRepository.findByPluginIdAndType(
+                    mediaFetchPluginConfig.pluginId(),
+                    AuthTypeEnum.API_KEY.getCode()
+            );
+            if (Objects.nonNull(existingConfig)) {
                 return CommonResult.failure(ResultEnum.SETTING_EXIST.getCode(), ResultEnum.SETTING_EXIST.getMessage());
             }
         }
+
+        config.setFetcherSource(mediaFetchPluginConfig.name());
+        config.setAuthType(AuthTypeEnum.API_KEY.getCode());
+        config.setPluginId(mediaFetchPluginConfig.pluginId());
+        mediaFetchConfigRepository.save(config.toEntity());
+        return CommonResult.success();
     }
 
     /**
