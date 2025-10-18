@@ -9,9 +9,15 @@ export async function ensureRemotes (): Promise<ReturnType<ModuleFederation['reg
   //   { alias:'vueViteRemote', name:'vueViteRemote', entry:'http://localhost:5174/remoteEntry.js' }
   // ]
   const { data } = await axiosInstance.get<MFConfig>('/plugin/module-federation')
+  // 追加主项目自带的菜单
+  data.menus.push(
+    { name: '系统管理', path: '', component: '', parent: true, children: [
+      { name: '应用设置', path: '/app-setting', local: true, component: 'AppSetting', parent: false, children: [] },
+    ] },
+  )
   console.log(data)
   if (!data?.remotes && !data?.menus) {
-    return Promise.resolve()
+    return
   }
   // 保存配置到 pinia
   useModuleFederation().setMfConfig(data)
