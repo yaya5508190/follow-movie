@@ -35,8 +35,8 @@ public class MediaFetchPluginConfig implements PluginConfig {
     @Override
     public List<PluginComponent> pluginComponents() {
         return List.of(
-                new PluginComponent(pluginId(), "mediaResourceFetcher", "m-team 馒头", "App", "m-team影视资源"),
-                new PluginComponent(pluginId(), "mediaResourceFetcherSetting", "m-team 馒头设置", "App-Setting", "m-team影视资源")
+                new PluginComponent(pluginId(), "mediaResourceFetcher", "馒头(M-Team)", "App", "m-team影视资源"),
+                new PluginComponent(pluginId(), "mediaResourceFetcherSetting", "馒头(M-Team)", "App-Setting", "m-team影视资源")
         );
     }
 }

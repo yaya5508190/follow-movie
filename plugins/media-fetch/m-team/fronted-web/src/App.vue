@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <media-resource-fetcher keyword="复仇者"/>
+      <media-resource-fetcher-setting action="insert"/>
     </v-main>
   </v-app>
 </template>
