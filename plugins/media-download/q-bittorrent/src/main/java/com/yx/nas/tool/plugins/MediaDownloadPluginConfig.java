@@ -3,15 +3,13 @@ package com.yx.nas.tool.plugins;
 import api.PluginComponent;
 import api.PluginConfig;
 import com.google.auto.service.AutoService;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 @AutoService(PluginConfig.class)
 @Configuration
-@ComponentScan(basePackages = "com.yx.framework")
-public class MediaDownloadPluginConfig  implements PluginConfig {
+public class MediaDownloadPluginConfig implements PluginConfig {
     @Override
     public String name() {
         return "q-bittorrent";
@@ -34,6 +32,8 @@ public class MediaDownloadPluginConfig  implements PluginConfig {
 
     @Override
     public List<PluginComponent> pluginComponents() {
-        return List.of();
+        return List.of(
+                new PluginComponent(pluginId(), "mediaResourceDownloaderSetting", "Q-Bittorrent", "App-Setting", "Q-Bittorrent下载器设置")
+        );
     }
 }
