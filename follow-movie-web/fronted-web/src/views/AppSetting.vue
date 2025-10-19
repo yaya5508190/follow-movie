@@ -101,35 +101,35 @@
           </div>
         </v-card>
       </v-col>
-      <v-col cols="12">
-        <v-card
-          color="grey-2"
-          variant="elevated"
-        >
-          <v-card-item>
-            <div>
-              <div class="text-overline mb-1">
-                <span class="setting-card-title">下载设置</span>
-              </div>
-            </div>
-          </v-card-item>
-          <div class="setting-card-button">
-            <v-btn
-              block
-              class=" mb-1 align-center "
-              color="grey-3"
-              prepend-icon="mdi-folder"
-              size="30"
-              variant="flat"
-            >
-              <template #prepend>
-                <v-icon class="setting-card-icon" />
-              </template>
-              媒体文件夹
-            </v-btn>
-          </div>
-        </v-card>
-      </v-col>
+      <!--      <v-col cols="12">-->
+      <!--        <v-card-->
+      <!--          color="grey-2"-->
+      <!--          variant="elevated"-->
+      <!--        >-->
+      <!--          <v-card-item>-->
+      <!--            <div>-->
+      <!--              <div class="text-overline mb-1">-->
+      <!--                <span class="setting-card-title">下载设置</span>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--          </v-card-item>-->
+      <!--          <div class="setting-card-button">-->
+      <!--            <v-btn-->
+      <!--              block-->
+      <!--              class=" mb-1 align-center "-->
+      <!--              color="grey-3"-->
+      <!--              prepend-icon="mdi-folder"-->
+      <!--              size="30"-->
+      <!--              variant="flat"-->
+      <!--            >-->
+      <!--              <template #prepend>-->
+      <!--                <v-icon class="setting-card-icon" />-->
+      <!--              </template>-->
+      <!--              媒体文件夹-->
+      <!--            </v-btn>-->
+      <!--          </div>-->
+      <!--        </v-card>-->
+      <!--      </v-col>-->
     </v-row>
     <!-- 新增：弹窗内容 -->
     <v-dialog v-model="settingDialog" max-width="800px" persistent scrollable>
