@@ -83,12 +83,31 @@
       v-model="searchDialogVisible"
       :keyword="searchKeyword"
     />
+
+    <!--    Snackbar 提示-->
+    <v-snackbar
+      v-model="snackbar"
+      :color="snackbarColor"
+      location="top"
+      :timeout="1800"
+    >
+      {{ snackbarText }}
+      <template #actions>
+        <v-btn
+          variant="text"
+          @click="snackbar = false"
+        >
+          关闭
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-layout>
 </template>
 
 <script lang="ts" setup>
   import { useDisplay, useTheme } from 'vuetify'
   import AggregateSearch from '@/components/AggregateSearch.vue'
+  import { eventBus } from '@/plugins/event-bus.ts'
   import { useModuleFederation } from '@/stores/module-federation.ts'
 
   import '@/styles/global.scss'
@@ -114,5 +133,22 @@
       open.value = false
     }
   }, { immediate: true })
+
+  // Snackbar 状态
+  const snackbar = ref(false)
+  const snackbarText = ref('')
+  const snackbarColor = ref('success')
+
+  // 显示提示
+  const showMessage = (message: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') => {
+    snackbarText.value = message
+    snackbarColor.value = type
+    snackbar.value = true
+  }
+
+  // 全局监听事件总线的消息提示事件
+  eventBus.on('plugin:show-message', (payload: { message: string, type: 'success' | 'error' | 'warning' | 'info' }) => {
+    showMessage(payload.message, payload.type)
+  })
 
 </script>

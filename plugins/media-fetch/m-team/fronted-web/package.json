@@ -16,6 +16,7 @@
     "@mdi/font": "7.4.47",
     "@module-federation/vite": "1.7.1",
     "axios": "^1.7.9",
+    "mitt": "^3.0.1",
     "vue": "^3.5.17",
     "vuetify": "^3.9.1"
   },

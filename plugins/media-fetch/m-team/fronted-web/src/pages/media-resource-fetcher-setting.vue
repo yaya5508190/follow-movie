@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import {ref, computed, onMounted} from 'vue'
+import {showMessage} from '@/plugins/showMessage'
+import {useEventBus} from '@/plugins/useEventBus'
 
 const emit = defineEmits(['dialog:close'])
+// 使用事件总线
+const eventBus = useEventBus()
 
 // 关闭弹窗
 const closeSettingDialog = () => {
@@ -58,18 +62,6 @@ const rules = {
 // 加载状态
 const loading = ref(false)
 
-// Snackbar 状态
-const snackbar = ref(false)
-const snackbarText = ref('')
-const snackbarColor = ref('success')
-
-// 显示提示
-const showMessage = (message: string, color: 'success' | 'error' | 'warning' | 'info' = 'success') => {
-  snackbarText.value = message
-  snackbarColor.value = color
-  snackbar.value = true
-}
-
 // 获取设置
 const getSetting = async () => {
   try {
@@ -89,11 +81,11 @@ const getSetting = async () => {
       }
     } else {
       console.error('获取配置失败:', response.data.message)
-      showMessage('获取配置失败: ' + (response.data.message || '未知错误'), 'error')
+      showMessage('获取配置失败: ' + (response.data.message || '未知错误'), 'error', eventBus)
     }
   } catch (error) {
     console.error('获取配置失败:', error)
-    showMessage('获取配置失败，请检查网络连接', 'error')
+    showMessage('获取配置失败，请检查网络连接', 'error', eventBus)
   } finally {
     loading.value = false
   }
@@ -109,9 +101,9 @@ onMounted(() => {
 // 保存设置
 const saveSettings = async () => {
   // 先进行表单校验
-  const { valid } = await formRef.value.validate()
+  const {valid} = await formRef.value.validate()
   if (!valid) {
-    showMessage('请检查表单填写是否正确', 'warning')
+    showMessage('请检查表单填写是否正确', 'warning', eventBus)
     return
   }
 
@@ -127,17 +119,15 @@ const saveSettings = async () => {
 
     if (response.data.code === 10000) {
       console.log('保存成功')
-      showMessage('保存成功', 'success')
-      setTimeout(() => {
-        closeSettingDialog()
-      }, 1000)
+      showMessage('保存成功', 'success', eventBus)
+      closeSettingDialog()
     } else {
       console.error('保存失败:', response.data.message)
-      showMessage('保存失败: ' + (response.data.message || '未知错误'), 'error')
+      showMessage('保存失败: ' + (response.data.message || '未知错误'), 'error', eventBus)
     }
   } catch (error) {
     console.error('保存配置失败:', error)
-    showMessage('保存配置失败，请联系管理员', 'error')
+    showMessage('保存配置失败，请联系管理员', 'error', eventBus)
   } finally {
     loading.value = false
   }
@@ -196,24 +186,6 @@ const saveSettings = async () => {
       </v-btn>
     </v-card-actions>
   </v-card>
-
-  <!-- Snackbar 提示 -->
-  <v-snackbar
-    v-model="snackbar"
-    :color="snackbarColor"
-    :timeout="1000"
-    location="top"
-  >
-    {{ snackbarText }}
-    <template #actions>
-      <v-btn
-        variant="text"
-        @click="snackbar = false"
-      >
-        关闭
-      </v-btn>
-    </template>
-  </v-snackbar>
 </template>
 
 <style scoped>
