@@ -17,9 +17,7 @@ export function mount (el: Element, props?: Record<string, any>, vuetify?: any) 
   app.use(vuetify)
 
   // 如果传入了事件总线，通过 provide 注入到整个子应用
-  console.log('mount app-setting with props:', props)
   if (props?.eventBus) {
-    console.log(props?.eventBus)
     app.provide('eventBus', props.eventBus)
    }
 
