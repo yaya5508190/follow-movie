@@ -1,5 +1,5 @@
 <template>
-    <media-resource-downloader-setting />
+    <media-resource-downloader-setting :action="action" @dialog:close="closeSettingDialog"/>
 </template>
 <script setup lang="ts">
 

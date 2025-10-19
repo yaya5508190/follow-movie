@@ -9,7 +9,7 @@
           <v-card-item>
             <div>
               <div class="text-overline mb-0">
-                <span class="setting-card-title">下载工具(必须配置)</span>
+                <span class="setting-card-title">下载工具</span>
               </div>
             </div>
           </v-card-item>
@@ -25,9 +25,12 @@
               <v-menu activator="parent">
                 <v-list>
                   <v-list-item
-                    value="q-bittorrent"
+                    v-for="(setting, index) in mediaResourceDownloaderSettings"
+                    :key="index"
+                    :value="setting.component"
+                    @click="() => openSettingDialog(setting,'insert')"
                   >
-                    <v-list-item-title>Q-Bittorrent</v-list-item-title>
+                    <v-list-item-title>{{ setting.meta }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -154,6 +157,12 @@
   const mediaResourceFetcherSettings = computed<PluginComponent[]>(() => {
     return moduleFederation.mfConfig.components.filter(
       component => component.type === 'mediaResourceFetcherSetting',
+    )
+  })
+
+  const mediaResourceDownloaderSettings = computed<PluginComponent[]>(() => {
+    return moduleFederation.mfConfig.components.filter(
+      component => component.type === 'mediaResourceDownloaderSetting',
     )
   })
 
