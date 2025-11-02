@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import type { DownloadToolConfigInput, MediaFetchConfigSimple, SysPreAuthSimple } from '@/types/download-tool-config'
-import { AuthType } from '@/types/download-tool-config'
-import { saveSetting, getSetting, deleteSetting, getAllMediaFetchConfigs, getAllSysPreAuthConfigs } from '@/api/download-tool-config'
+import {ref, computed, onMounted} from 'vue'
+import type {DownloadToolConfigInput, MediaFetchConfigSimple, SysPreAuthSimple} from '@/types/download-tool-config'
+import {AuthType} from '@/types/download-tool-config'
+import {
+  saveSetting,
+  getSetting,
+  deleteSetting,
+  getAllMediaFetchConfigs,
+  getAllSysPreAuthConfigs
+} from '@/api/download-tool-config'
 
 const emit = defineEmits(['dialog:close'])
 
@@ -22,8 +28,8 @@ const title = computed(() => {
 
 // 认证类型选项
 const authTypeOptions = [
-  { title: '用户名密码', value: AuthType.USERNAME_PASSWORD },
-  { title: 'Cookie', value: AuthType.COOKIE }
+  {title: '用户名密码', value: AuthType.USERNAME_PASSWORD},
+  {title: 'Cookie', value: AuthType.COOKIE}
 ]
 
 // 可选的媒体资源获取配置列表
@@ -149,7 +155,7 @@ const loadSettings = async () => {
 // 保存设置
 const saveSettings = async () => {
   // 验证表单
-  const { valid } = await form.value.validate()
+  const {valid} = await form.value.validate()
   if (!valid) {
     return
   }
@@ -303,6 +309,7 @@ onMounted(() => {
               required
             />
           </v-col>
+          <!-- 关联的媒体资源站点 -->
           <v-col cols="12">
             <v-select
               v-model="formData.mediaFetchConfigIds"
@@ -317,6 +324,10 @@ onMounted(() => {
               clearable
               hint="选择需要使用此下载工具的媒体资源站点"
               persistent-hint
+              :menu-props="{
+                maxHeight: 300,
+                closeOnContentClick: false
+              }"
             >
               <template #chip="{ item, props }">
                 <v-chip v-bind="props" closable>
@@ -329,6 +340,7 @@ onMounted(() => {
             </v-select>
           </v-col>
 
+          <!-- 关联的预认证配置 -->
           <v-col cols="12">
             <v-select
               v-model="formData.sysPreAuthId"
@@ -339,14 +351,19 @@ onMounted(() => {
               variant="outlined"
               density="comfortable"
               clearable
-              hint="选择此下载工具使用的预认证配置（可选）"
+              hint="选择此下载工具使用的预认证配置(可选)"
               persistent-hint
+              :menu-props="{
+                maxHeight: 300,
+                closeOnContentClick: false
+              }"
             >
               <template #prepend-inner>
-                <v-icon icon="mdi-shield-key" size="small" />
+                <v-icon icon="mdi-shield-key" size="small"/>
               </template>
             </v-select>
           </v-col>
+
 
           <v-col cols="12">
             <v-switch
@@ -412,6 +429,19 @@ onMounted(() => {
   </v-dialog>
 </template>
 
-<style scoped>
+<style>
+/* 确保菜单在 v-dialog 之上,并且可交互 */
+.v-overlay.v-menu {
+  z-index: 2410 !important; /* 高于 v-dialog 的 2400 */
+  pointer-events: auto !important;
+}
 
+.v-overlay.v-menu .v-overlay__content {
+  pointer-events: auto !important;
+}
+
+.v-overlay.v-menu .v-list {
+  pointer-events: auto !important;
+}
 </style>
+
