@@ -30,3 +30,12 @@ export async function getSetting(id: number): Promise<CommonResult<SysPreAuthVie
   const response = await axiosInstance.post(`/api/z-space/getSetting/${id}`)
   return response.data as CommonResult<SysPreAuthView>
 }
+
+/**
+ * 删除预认证设置
+ * @param id 设置ID
+ */
+export async function deleteSetting(id: number): Promise<CommonResult<void>> {
+  const response = await axiosInstance.post(`/api/z-space/deleteSetting/${id}`)
+  return response.data as CommonResult<void>
+}

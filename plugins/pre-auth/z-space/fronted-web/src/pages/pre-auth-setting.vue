@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import type { SysPreAuthInput } from '@/types/sys-pre-auth'
-import { AuthType, CredentialType } from '@/types/sys-pre-auth'
-import { saveSetting, getSetting } from '@/api/z-space-setting'
+import {ref, computed, onMounted, watch} from 'vue'
+import type {SysPreAuthInput} from '@/types/sys-pre-auth'
+import {AuthType, CredentialType} from '@/types/sys-pre-auth'
+import {saveSetting, getSetting, deleteSetting} from '@/api/z-space-setting'
+import {showMessage} from '@/plugins/showMessage'
+import {useEventBus} from '@/plugins/useEventBus'
 
 const emit = defineEmits(['dialog:close'])
+// 使用事件总线
+const eventBus = useEventBus()
 
 // 定义props action，支持 insert 或 update
 const props = defineProps<{
@@ -22,7 +26,7 @@ const title = computed(() => {
 
 // 凭据类型选项
 const credentialTypeOptions = [
-  { title: 'Cookie', value: CredentialType.COOKIE }
+  {title: 'Cookie', value: CredentialType.COOKIE}
 ]
 
 // 表单数据
@@ -122,7 +126,7 @@ const loadSettings = async () => {
 // 保存设置
 const saveSettings = async () => {
   // 验证表单
-  const { valid } = await form.value.validate()
+  const {valid} = await form.value.validate()
   if (!valid) {
     return
   }
@@ -132,11 +136,14 @@ const saveSettings = async () => {
     const result = await saveSetting(formData.value)
     if (result.code === 10000) {
       emit('dialog:close', true)
+      showMessage('保存成功', 'success', eventBus)
     } else {
       console.error('保存失败:', result.message)
+      showMessage('保存失败: ' + (result.message || '未知错误'), 'error', eventBus)
     }
   } catch (error) {
     console.error('保存设置失败:', error)
+    showMessage('保存设置失败，请联系管理员', 'error', eventBus)
   } finally {
     loading.value = false
   }
@@ -144,6 +151,37 @@ const saveSettings = async () => {
 
 // 密码可见性控制
 const showPassword = ref(false)
+
+// 删除确认对话框
+const showDeleteDialog = ref(false)
+
+// 删除设置
+const handleDelete = () => {
+  showDeleteDialog.value = true
+}
+
+// 确认删除
+const confirmDelete = async () => {
+  if (!props.id) return
+
+  loading.value = true
+  try {
+    const result = await deleteSetting(props.id)
+    if (result.code === 10000) {
+      showDeleteDialog.value = false
+      emit('dialog:close', true)
+      showMessage('删除成功', 'success', eventBus)
+    } else {
+      console.error('删除失败:', result.message)
+      showMessage('删除失败: ' + (result.message || '未知错误'), 'error', eventBus)
+    }
+  } catch (error) {
+    console.error('删除设置失败:', error)
+    showMessage('删除设置失败，请联系管理员', 'error', eventBus)
+  } finally {
+    loading.value = false
+  }
+}
 
 // 组件挂载时加载数据
 onMounted(() => {
@@ -245,6 +283,16 @@ onMounted(() => {
       </v-form>
     </v-card-text>
     <v-card-actions>
+      <!-- 删除按钮（仅在编辑模式显示） -->
+      <v-btn
+        v-if="props.action === 'update'"
+        color="error"
+        variant="text"
+        @click="handleDelete"
+        :disabled="loading"
+      >
+        删除
+      </v-btn>
       <v-spacer/>
       <v-btn variant="text" @click="closeSettingDialog" :disabled="loading">取消</v-btn>
       <v-btn
@@ -258,6 +306,33 @@ onMounted(() => {
       </v-btn>
     </v-card-actions>
   </v-card>
+
+  <!-- 删除确认对话框 -->
+  <v-dialog v-model="showDeleteDialog" max-width="400">
+    <v-card>
+      <v-card-title class="text-h6">
+        确认删除
+      </v-card-title>
+      <v-card-text>
+        确定要删除此配置吗？此操作无法撤销。
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer/>
+        <v-btn variant="text" @click="showDeleteDialog = false" :disabled="loading">
+          取消
+        </v-btn>
+        <v-btn
+          color="error"
+          variant="flat"
+          @click="confirmDelete"
+          :loading="loading"
+          :disabled="loading"
+        >
+          确认删除
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped>

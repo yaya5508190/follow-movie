@@ -22,4 +22,9 @@ public class ZSpaceSettingService {
         SysPreAuthView config = sysPreAuthRepository.findById(id, SysPreAuthView.class);
         return CommonResult.success(config);
     }
+
+    public CommonResult<Void> deleteSetting(Long id) {
+        sysPreAuthRepository.deleteById(id);
+        return CommonResult.success();
+    }
 }

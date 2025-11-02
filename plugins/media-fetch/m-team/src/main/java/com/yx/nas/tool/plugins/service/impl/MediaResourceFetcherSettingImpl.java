@@ -72,4 +72,16 @@ public class MediaResourceFetcherSettingImpl {
             return CommonResult.failure(SETTING_NOT_EXIST.getCode(), SETTING_NOT_EXIST.getMessage());
         }
     }
+
+    /**
+     * 删除设置
+     *
+     * @param id 配置ID
+     * @return 删除结果
+     */
+    @Transactional
+    public CommonResult<Void> deleteSetting(Long id) {
+        mediaFetchConfigRepository.deleteById(id);
+        return CommonResult.success();
+    }
 }

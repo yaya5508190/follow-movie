@@ -22,4 +22,9 @@ public class ZSpaceSettingController {
     public CommonResult<SysPreAuthView> getSetting(@PathVariable("id") Long id) {
         return zSpaceSettingService.getSetting(id);
     }
+
+    @PostMapping("/deleteSetting/{id}")
+    public CommonResult<Void> deleteSetting(@PathVariable("id") Long id) {
+        return zSpaceSettingService.deleteSetting(id);
+    }
 }
