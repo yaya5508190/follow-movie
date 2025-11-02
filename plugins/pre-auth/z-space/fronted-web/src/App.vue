@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <pre-auth-setting :action="'update'" :id="1"/>
+      <pre-auth-setting :action="'update'" :id="10"/>
     </v-main>
   </v-app>
 </template>
