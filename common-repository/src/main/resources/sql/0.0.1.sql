@@ -61,7 +61,7 @@ comment on column media_fetch_config.create_time is
 comment on column media_fetch_config.update_time is
     '更新时间';
 
-create unique index u_plugin_id on media_fetch_config ( auth_type, plugin_id );
+create unique index u_plugin_id on media_fetch_config (auth_type, plugin_id);
 
 /*==============================================================*/
 /* Table: media_torrent_record                                  */
@@ -188,16 +188,20 @@ create table media_fetch_download_rel
 /*==============================================================*/
 create unique index u_idx_media_fetch_download on media_fetch_download_rel (media_fetch_id, download_tool_id);
 
-drop table if exists sys_rest_pre_auth;
+drop table if exists sys_pre_auth;
 
 /*==============================================================*/
-/* Table: sys_rest_pre_auth                                     */
+/* Table: sys_pre_auth                                          */
 /*==============================================================*/
-create table sys_rest_pre_auth
+
+/*==============================================================*/
+/* Table: sys_pre_auth                                          */
+/*==============================================================*/
+create table sys_pre_auth
 (
     id              BIGSERIAL     not null,
     auth_name       VARCHAR(255)  null,
-    auth_url        VARCHAR(255)  not null,
+    auth_url        VARCHAR(255)  null,
     user_name       VARCHAR(150)  null,
     password        VARCHAR(150)  null,
     auth_type       INT2          not null,
@@ -207,35 +211,35 @@ create table sys_rest_pre_auth
     plugin_id       VARCHAR(64)   not null,
     create_time     TIMESTAMP     not null default CURRENT_TIMESTAMP,
     update_time     TIMESTAMP     null,
-    constraint PK_SYS_REST_PRE_AUTH primary key (id)
+    constraint PK_SYS_PRE_AUTH primary key (id)
 );
 
-comment on column sys_rest_pre_auth.auth_url is
+comment on column sys_pre_auth.auth_url is
     '认证URL';
 
-comment on column sys_rest_pre_auth.user_name is
+comment on column sys_pre_auth.user_name is
     '访问用户名';
 
-comment on column sys_rest_pre_auth.password is
+comment on column sys_pre_auth.password is
     '访问密码';
 
-comment on column sys_rest_pre_auth.auth_type is
-    '1:api_key 2: 用户名密码 3: cookie';
+comment on column sys_pre_auth.auth_type is
+    '0:无 1:api_key 2: 用户名密码 ';
 
-comment on column sys_rest_pre_auth.credential is
+comment on column sys_pre_auth.credential is
     '认证凭据';
 
-comment on column sys_rest_pre_auth.credential_type is
+comment on column sys_pre_auth.credential_type is
     '认证凭据类型1: cookie';
 
-comment on column sys_rest_pre_auth.extra_metainfo is
+comment on column sys_pre_auth.extra_metainfo is
     '额外元数据';
 
-comment on column sys_rest_pre_auth.plugin_id is
+comment on column sys_pre_auth.plugin_id is
     '插件id';
 
-comment on column sys_rest_pre_auth.create_time is
+comment on column sys_pre_auth.create_time is
     '创建时间';
 
-comment on column sys_rest_pre_auth.update_time is
+comment on column sys_pre_auth.update_time is
     '更新时间';
