@@ -46,4 +46,9 @@ public class MTeamMediaResourceFetcherController {
     public CommonResult<ApiKeyMediaFetchConfigInput> getSetting(@PathVariable("id") Long id) {
         return mediaResourceFetcherSetting.getSetting(id);
     }
+
+    @PostMapping("/deleteSetting/{id}")
+    public CommonResult<Void> deleteSetting(@PathVariable("id") Long id) {
+        return mediaResourceFetcherSetting.deleteSetting(id);
+    }
 }
