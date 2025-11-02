@@ -1,0 +1,10 @@
+export com.yx.nas.entity.SysPreAuth
+    -> package com.yx.nas.dto
+
+input SysPreAuthInput {
+    #allScalars(SysPreAuth)
+}
+
+SysPreAuthView {
+    #allScalars(this)
+}
