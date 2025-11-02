@@ -243,3 +243,24 @@ comment on column sys_pre_auth.create_time is
 
 comment on column sys_pre_auth.update_time is
     '更新时间';
+
+drop index if exists u_idx_pre_auth_download;
+
+drop table if exists  pre_auth_download_rel;
+
+/*==============================================================*/
+/* Table: pre_auth_download_rel                                 */
+/*==============================================================*/
+create table pre_auth_download_rel
+(
+    pre_auth_id      BIGSERIAL not null,
+    download_tool_id BIGSERIAL not null
+);
+
+/*==============================================================*/
+/* Index: u_idx_pre_auth_download                               */
+/*==============================================================*/
+create unique index u_idx_pre_auth_download on pre_auth_download_rel (
+    pre_auth_id,
+    download_tool_id
+);

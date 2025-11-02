@@ -4,10 +4,12 @@ export com.yx.nas.entity.DownloadToolConfig
 input DownloadToolConfigInput {
     #allScalars(DownloadToolConfig)
     id(mediaFetchConfigs) as mediaFetchConfigIds
+    id(sysPreAuth) as sysPreAuthId
 }
 
 DownloadToolConfigView {
 
     #allScalars
     id(mediaFetchConfigs) as mediaFetchConfigIds
+    id(sysPreAuth) as sysPreAuthId
 }

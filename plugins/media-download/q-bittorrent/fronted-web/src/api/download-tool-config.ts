@@ -48,3 +48,10 @@ export async function getAllMediaFetchConfigs (): Promise<CommonResult<Array<{ i
   return response.data
 }
 
+/**
+ * 获取所有预认证配置列表
+ */
+export async function getAllSysPreAuthConfigs (): Promise<CommonResult<Array<{ id: number; authName: string }>>> {
+  const response = await axiosInstance.post('/api/preAuthSetting/queryAllPreAuthSettings')
+  return response.data
+}

@@ -25,6 +25,16 @@ export interface MediaFetchConfigSimple {
 }
 
 /**
+ * 预认证配置（简化）
+ */
+export interface SysPreAuthSimple {
+  /** ID */
+  id: number
+  /** 认证名称 */
+  authName: string
+}
+
+/**
  * 下载工具配置输入
  */
 export interface DownloadToolConfigInput {
@@ -50,6 +60,8 @@ export interface DownloadToolConfigInput {
   defaultTool: boolean
   /** 关联的媒体资源获取配置 ID 列表 */
   mediaFetchConfigIds?: number[]
+  /** 关联的预认证配置 ID */
+  sysPreAuthId?: number
 }
 
 /**
@@ -82,5 +94,6 @@ export interface DownloadToolConfigView {
   defaultTool: boolean
   /** 关联的媒体资源获取配置列表 */
   mediaFetchConfigs?: MediaFetchConfigSimple[]
+  /** 关联的预认证配置 */
+  sysPreAuth?: SysPreAuthSimple
 }
-

@@ -5,6 +5,8 @@ import org.jetbrains.annotations.Nullable;
 import com.yx.nas.entity.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -84,5 +86,10 @@ public interface SysPreAuth extends BaseEntity {
      */
     @Column(name = "plugin_id")
     String pluginId();
+
+    @OneToMany(mappedBy = "sysPreAuth", orderedProps = {
+            @OrderedProp("name")
+    })
+    List<DownloadToolConfig> downloadToolConfigs();
 
 }

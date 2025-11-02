@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import type { DownloadToolConfigInput, MediaFetchConfigSimple } from '@/types/download-tool-config'
+import type { DownloadToolConfigInput, MediaFetchConfigSimple, SysPreAuthSimple } from '@/types/download-tool-config'
 import { AuthType } from '@/types/download-tool-config'
-import { saveSetting, getSetting, deleteSetting, getAllMediaFetchConfigs } from '@/api/download-tool-config'
+import { saveSetting, getSetting, deleteSetting, getAllMediaFetchConfigs, getAllSysPreAuthConfigs } from '@/api/download-tool-config'
 
 const emit = defineEmits(['dialog:close'])
 
@@ -29,6 +29,9 @@ const authTypeOptions = [
 // 可选的媒体资源获取配置列表
 const availableMediaFetchConfigs = ref<MediaFetchConfigSimple[]>([])
 
+// 可选的预认证配置列表
+const availableSysPreAuthConfigs = ref<SysPreAuthSimple[]>([])
+
 // 表单数据
 const formData = ref<DownloadToolConfigInput>({
   id: undefined,
@@ -41,7 +44,8 @@ const formData = ref<DownloadToolConfigInput>({
   cookie: '',
   savePath: '/downloads',
   defaultTool: false,
-  mediaFetchConfigIds: []
+  mediaFetchConfigIds: [],
+  sysPreAuthId: undefined
 })
 
 // 表单校验规则
@@ -106,6 +110,18 @@ const loadMediaFetchConfigs = async () => {
     }
   } catch (error) {
     console.error('加载媒体资源获取配置失败:', error)
+  }
+}
+
+// 加载所有预认证配置
+const loadSysPreAuthConfigs = async () => {
+  try {
+    const result = await getAllSysPreAuthConfigs()
+    if (result.code === 10000 && result.data) {
+      availableSysPreAuthConfigs.value = result.data
+    }
+  } catch (error) {
+    console.error('加载预认证配置失败:', error)
   }
 }
 
@@ -187,6 +203,7 @@ const confirmDelete = async () => {
 // 组件挂载时加载数据
 onMounted(() => {
   loadMediaFetchConfigs()
+  loadSysPreAuthConfigs()
   loadSettings()
 })
 </script>
@@ -311,6 +328,26 @@ onMounted(() => {
               </template>
             </v-select>
           </v-col>
+
+          <v-col cols="12">
+            <v-select
+              v-model="formData.sysPreAuthId"
+              label="关联的预认证配置"
+              :items="availableSysPreAuthConfigs"
+              item-title="authName"
+              item-value="id"
+              variant="outlined"
+              density="comfortable"
+              clearable
+              hint="选择此下载工具使用的预认证配置（可选）"
+              persistent-hint
+            >
+              <template #prepend-inner>
+                <v-icon icon="mdi-shield-key" size="small" />
+              </template>
+            </v-select>
+          </v-col>
+
           <v-col cols="12">
             <v-switch
               v-model="formData.defaultTool"

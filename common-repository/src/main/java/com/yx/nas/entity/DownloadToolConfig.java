@@ -87,6 +87,11 @@ public interface DownloadToolConfig extends BaseEntity {
      */
     @Nullable
     @ManyToOne
+    @JoinTable(
+            name = "pre_auth_download_rel",
+            joinColumnName = "download_tool_id",
+            inverseJoinColumnName = "pre_auth_id"
+    )
     @OnDissociate(DissociateAction.SET_NULL)
-    SysPreAuth preAuth();
+    SysPreAuth sysPreAuth();
 }
