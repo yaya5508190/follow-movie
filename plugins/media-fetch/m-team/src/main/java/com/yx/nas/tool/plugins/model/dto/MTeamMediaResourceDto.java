@@ -1,8 +1,14 @@
 package com.yx.nas.tool.plugins.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -75,7 +81,8 @@ public class MTeamMediaResourceDto {
         private Integer leechers;
         private Boolean banned;
         private Boolean visible;
-        private String promotionRule;
+        @JsonDeserialize(using = PromotionRuleDeserializer.class)
+        private Object promotionRule;
         private MallSingleFreeVo mallSingleFree;
     }
 
@@ -97,5 +104,35 @@ public class MTeamMediaResourceDto {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime endDate;
         private String status;
+    }
+
+    @Data
+    public static class PromotionRuleVo {
+        private String createdDate;
+        private String lastModifiedDate;
+        private String id;
+        private List<String> categories;
+        private List<String> teams;
+        private String discount;
+        private String startTime;
+        private String endTime;
+        private String operatorId;
+        private String operator;
+    }
+
+    /**
+     * Custom deserializer for promotionRule field to support both String and Object types
+     */
+    public static class PromotionRuleDeserializer extends JsonDeserializer<Object> {
+        @Override
+        public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+            JsonNode node = p.getCodec().readTree(p);
+            if (node.isTextual()) {
+                return node.asText();
+            } else if (node.isObject()) {
+                return p.getCodec().treeToValue(node, PromotionRuleVo.class);
+            }
+            return null;
+        }
     }
 }
