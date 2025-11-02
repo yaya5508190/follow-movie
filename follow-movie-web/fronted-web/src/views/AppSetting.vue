@@ -189,7 +189,13 @@
       </v-col>
     </v-row>
     <!-- 新增：弹窗内容 -->
-    <v-dialog v-model="settingDialog" max-width="800px" persistent scrollable>
+    <v-dialog
+      v-model="settingDialog"
+      content-class="dialog-with-max-height"
+      max-width="800px"
+      persistent
+      scrollable
+    >
       <PluginView
         v-if="currentSetting"
         :id="currentId"
@@ -347,5 +353,24 @@
 
 .setting-card-icon {
   padding-top: 2px;
+}
+</style>
+
+<style>
+/* 为对话框设置最大高度和滚动 - 使用非 scoped 样式 */
+.dialog-with-max-height {
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+
+.dialog-with-max-height .v-card {
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.dialog-with-max-height .v-card-text {
+  overflow-y: auto !important;
+  flex: 1 1 auto !important;
 }
 </style>
