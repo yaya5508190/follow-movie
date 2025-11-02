@@ -4,6 +4,8 @@ import com.yx.nas.entity.base.BaseEntity;
 import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.*;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -93,13 +95,12 @@ public interface MediaFetchConfig extends BaseEntity {
     /**
      * 关联的下载工具配置
      */
-    @ManyToOne
+    @ManyToMany
     @JoinTable(
             name = "media_fetch_download_rel",
             joinColumnName = "download_tool_id",
             inverseJoinColumnName = "media_fetch_id"
     )
-    @Nullable
-    DownloadToolConfig downloadToolConfigs();
+    List<DownloadToolConfig> downloadToolConfigs();
 
 }

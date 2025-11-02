@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import type { DownloadToolConfigInput } from '@/types/download-tool-config'
+import type { DownloadToolConfigInput, MediaFetchConfigSimple } from '@/types/download-tool-config'
 import { AuthType } from '@/types/download-tool-config'
-import { saveSetting, getSetting, deleteSetting } from '@/api/download-tool-config'
+import { saveSetting, getSetting, deleteSetting, getAllMediaFetchConfigs } from '@/api/download-tool-config'
 
 const emit = defineEmits(['dialog:close'])
 
@@ -26,6 +26,9 @@ const authTypeOptions = [
   { title: 'Cookie', value: AuthType.COOKIE }
 ]
 
+// 可选的媒体资源获取配置列表
+const availableMediaFetchConfigs = ref<MediaFetchConfigSimple[]>([])
+
 // 表单数据
 const formData = ref<DownloadToolConfigInput>({
   id: undefined,
@@ -37,7 +40,8 @@ const formData = ref<DownloadToolConfigInput>({
   password: '',
   cookie: '',
   savePath: '/downloads',
-  defaultTool: false
+  defaultTool: false,
+  mediaFetchConfigIds: []
 })
 
 // 表单校验规则
@@ -93,6 +97,18 @@ const closeSettingDialog = () => {
   emit('dialog:close', false)
 }
 
+// 加载所有媒体资源获取配置
+const loadMediaFetchConfigs = async () => {
+  try {
+    const result = await getAllMediaFetchConfigs()
+    if (result.code === 10000 && result.data) {
+      availableMediaFetchConfigs.value = result.data
+    }
+  } catch (error) {
+    console.error('加载媒体资源获取配置失败:', error)
+  }
+}
+
 // 加载设置数据
 const loadSettings = async () => {
   if (props.action === 'update' && props.id) {
@@ -101,6 +117,10 @@ const loadSettings = async () => {
       const result = await getSetting(props.id)
       if (result.code === 10000 && result.data) {
         Object.assign(formData.value, result.data)
+        // 将关联的配置 ID 列表转换
+        if (result.data.mediaFetchConfigs) {
+          formData.value.mediaFetchConfigIds = result.data.mediaFetchConfigs.map(c => c.id)
+        }
       }
     } catch (error) {
       console.error('加载设置失败:', error)
@@ -166,6 +186,7 @@ const confirmDelete = async () => {
 
 // 组件挂载时加载数据
 onMounted(() => {
+  loadMediaFetchConfigs()
   loadSettings()
 })
 </script>
@@ -265,7 +286,31 @@ onMounted(() => {
               required
             />
           </v-col>
-
+          <v-col cols="12">
+            <v-select
+              v-model="formData.mediaFetchConfigIds"
+              label="关联的媒体资源站点"
+              :items="availableMediaFetchConfigs"
+              item-title="name"
+              item-value="id"
+              variant="outlined"
+              density="comfortable"
+              multiple
+              chips
+              clearable
+              hint="选择需要使用此下载工具的媒体资源站点"
+              persistent-hint
+            >
+              <template #chip="{ item, props }">
+                <v-chip v-bind="props" closable>
+                  {{ item.raw.name }}
+                  <v-tooltip activator="parent" location="top">
+                    {{ item.raw.fetcherSource }}
+                  </v-tooltip>
+                </v-chip>
+              </template>
+            </v-select>
+          </v-col>
           <v-col cols="12">
             <v-switch
               v-model="formData.defaultTool"

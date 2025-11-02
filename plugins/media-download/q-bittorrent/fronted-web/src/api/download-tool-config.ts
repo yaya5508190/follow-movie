@@ -40,3 +40,11 @@ export async function deleteSetting (id: number): Promise<CommonResult<void>> {
   return response.data as CommonResult<void>
 }
 
+/**
+ * 获取所有媒体资源获取配置列表
+ */
+export async function getAllMediaFetchConfigs (): Promise<CommonResult<Array<{ id: number; name: string; fetcherSource: string }>>> {
+  const response = await axiosInstance.post('/api/mediaResourceFetcherSetting/queryAllFetcherSettings')
+  return response.data
+}
+

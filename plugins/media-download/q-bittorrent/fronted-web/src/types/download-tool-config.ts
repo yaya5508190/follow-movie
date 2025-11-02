@@ -13,6 +13,18 @@ export enum AuthType {
 }
 
 /**
+ * 媒体资源获取配置（简化）
+ */
+export interface MediaFetchConfigSimple {
+  /** ID */
+  id: number
+  /** 名称 */
+  name? : string
+  /** 来源 */
+  fetcherSource? : string
+}
+
+/**
  * 下载工具配置输入
  */
 export interface DownloadToolConfigInput {
@@ -36,6 +48,8 @@ export interface DownloadToolConfigInput {
   savePath: string
   /** 是否默认 */
   defaultTool: boolean
+  /** 关联的媒体资源获取配置 ID 列表 */
+  mediaFetchConfigIds?: number[]
 }
 
 /**
@@ -66,5 +80,7 @@ export interface DownloadToolConfigView {
   savePath: string
   /** 是否默认 */
   defaultTool: boolean
+  /** 关联的媒体资源获取配置列表 */
+  mediaFetchConfigs?: MediaFetchConfigSimple[]
 }
 

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <media-resource-downloader-setting />
+      <media-resource-downloader-setting :action="'update'" :id="9"/>
     </v-main>
   </v-app>
 </template>

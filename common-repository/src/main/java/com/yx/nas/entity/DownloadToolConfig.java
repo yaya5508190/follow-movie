@@ -77,10 +77,16 @@ public interface DownloadToolConfig extends BaseEntity {
     @Column(name = "default_tool")
     boolean defaultTool();
 
-    @OneToMany(mappedBy = "downloadToolConfigs",
-            orderedProps = {
-                    @OrderedProp("fetcherSource")
-            }
-    )
+    @ManyToMany(mappedBy = "downloadToolConfigs", orderedProps = {
+            @OrderedProp("name"),
+    })
     List<MediaFetchConfig> mediaFetchConfigs();
+
+    /**
+     * 关联的下载工具配置
+     */
+    @Nullable
+    @ManyToOne
+    @OnDissociate(DissociateAction.SET_NULL)
+    SysPreAuth preAuth();
 }

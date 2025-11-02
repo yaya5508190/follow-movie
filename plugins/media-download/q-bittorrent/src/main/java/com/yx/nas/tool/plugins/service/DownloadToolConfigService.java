@@ -16,6 +16,7 @@ public class DownloadToolConfigService {
 
     @Transactional
     public CommonResult<Void> saveSetting(DownloadToolConfigInput config) {
+        // 直接保存，Jimmer 会根据 DTO 中的 mediaFetchConfigIds 自动处理关联
         downloadToolConfigRepository.save(config.toEntity(), SaveMode.NON_IDEMPOTENT_UPSERT);
         return CommonResult.success();
     }
