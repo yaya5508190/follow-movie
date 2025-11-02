@@ -15,5 +15,6 @@
         <module>media-hub</module>
         <module>media-fetch</module>
         <module>media-download</module>
+        <module>pre-auth</module>
     </modules>
 </project>
