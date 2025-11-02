@@ -1,0 +1,64 @@
+logging:
+  level:
+    root: debug
+server:
+  servlet:
+    context-path: "/67c6ec24-a9a7-430e-ae2f-321ab5fe7589"
+  port: 8084
+x-spider:
+  enabled: true
+  threads: 4
+  request-timeout-ms: 15000
+  retry:
+    max-attempts: 3
+    backoff-ms: 800
+  rate-limit:
+    per-host-permits-per-second: 1.0
+  user-agents:
+    - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+    - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15
+  proxies: []
+  robots:
+    respect: false
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/follow_movie
+    username: postgres
+    password: 123
+
+jimmer:
+  offset-optimizing-threshold: 10
+  id-only-target-checking-level: ALL
+  database-validation-mode: ERROR
+  show-sql: true
+  pretty-sql: true
+
+  # You can enable the following configuration line `inline-sql-variables: true`,
+  # restart the application and call some REST APIs again to see what happens
+  # inline-sql-variables: true
+
+  executor-context-prefixes:
+    - com.yx.nas.tool.plugins
+  client:
+    ts:
+      path: /ts.zip
+    openapi:
+      path: /openapi.yml
+      ui-path: /openapi.html
+      properties:
+        info:
+          title: Jimmer REST Example(Java)
+          description: This is the OpenAPI UI of Jimmer REST Example(Java)
+          version: 0.9.74
+        securities:
+          - tenantHeader: [ ]
+        components:
+          securitySchemes:
+            tenantHeader:
+              type: apiKey
+              name: tenant
+              in: HEADER
+        servers:
+          - url: /67c6ec24-a9a7-430e-ae2f-321ab5fe7589
