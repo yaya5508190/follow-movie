@@ -1,6 +1,10 @@
 export com.yx.nas.entity.DownloadToolConfig
     -> package com.yx.nas.dto
 
+input DownloadToolConfigInput {
+    #allScalars(DownloadToolConfig)
+}
+
 DownloadToolConfigView {
 
     #allScalars
