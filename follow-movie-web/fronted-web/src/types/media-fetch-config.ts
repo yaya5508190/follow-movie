@@ -1,5 +1,5 @@
 export interface BasicMediaFetchConfig {
-  id: string
+  id: number
   name: string
   fetcherSource: string
   pluginId: string

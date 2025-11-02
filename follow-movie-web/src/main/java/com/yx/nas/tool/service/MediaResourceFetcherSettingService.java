@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class MediaResourceFetcherSettingService {
-    public final MediaFetchConfigRepository mediaFetchConfigRepository;
+    private final MediaFetchConfigRepository mediaFetchConfigRepository;
 
     public CommonResult<List<BasicMediaFetchConfig>> queryAllFetcherSettings(){
         List<BasicMediaFetchConfig> fetcherSettings = mediaFetchConfigRepository.queryAllFetcherSettings();

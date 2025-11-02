@@ -42,8 +42,8 @@ public class MTeamMediaResourceFetcherController {
         return mediaResourceFetcherSetting.saveSetting(config);
     }
 
-    @PostMapping("/getSetting")
-    public CommonResult<ApiKeyMediaFetchConfigInput> getSetting() {
-        return mediaResourceFetcherSetting.getSetting();
+    @PostMapping("/getSetting/{id}")
+    public CommonResult<ApiKeyMediaFetchConfigInput> getSetting(@PathVariable("id") Long id) {
+        return mediaResourceFetcherSetting.getSetting(id);
     }
 }

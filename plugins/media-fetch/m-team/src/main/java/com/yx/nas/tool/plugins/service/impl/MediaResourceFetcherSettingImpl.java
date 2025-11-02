@@ -56,11 +56,8 @@ public class MediaResourceFetcherSettingImpl {
      *
      * @return 配置
      */
-    public CommonResult<ApiKeyMediaFetchConfigInput> getSetting() {
-        ApiKeyMediaFetchConfig existingConfig = mediaFetchConfigRepository.findByPluginIdAndType(
-                mediaFetchPluginConfig.pluginId(),
-                AuthTypeEnum.API_KEY.getCode()
-        );
+    public CommonResult<ApiKeyMediaFetchConfigInput> getSetting(Long id) {
+        ApiKeyMediaFetchConfig existingConfig = mediaFetchConfigRepository.findById(id,ApiKeyMediaFetchConfig.class);
         if (existingConfig != null) {
             ApiKeyMediaFetchConfigInput configInput = new ApiKeyMediaFetchConfigInput();
             configInput.setId(existingConfig.getId());
