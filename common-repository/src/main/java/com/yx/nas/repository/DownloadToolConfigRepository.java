@@ -6,7 +6,6 @@ import com.yx.nas.entity.DownloadToolConfigFetcher;
 import com.yx.nas.entity.DownloadToolConfigTable;
 import org.babyfish.jimmer.spring.repo.support.AbstractJavaRepository;
 import org.babyfish.jimmer.sql.JSqlClient;
-import org.babyfish.jimmer.sql.ast.Predicate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -65,5 +64,13 @@ public class DownloadToolConfigRepository extends AbstractJavaRepository<Downloa
         }
     }
 
+    /**
+     * 查询所有下载工具配置
+     */
+    public List<DownloadToolConfigView> queryAllDownloadToolSettings() {
+        return sql
+                .createQuery(table)
+                .select(table.fetch(DownloadToolConfigView.class))
+                .execute();
+    }
 }
-

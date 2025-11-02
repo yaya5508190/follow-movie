@@ -102,6 +102,7 @@ drop index if exists u_idx_name;
 
 drop table if exists download_tool_config;
 
+
 /*==============================================================*/
 /* Table: download_tool_config                                  */
 /*==============================================================*/
@@ -117,6 +118,7 @@ create table download_tool_config
     cookie       VARCHAR(2000) null,
     save_path    VARCHAR(1000) not null,
     default_tool BOOLEAN       not null,
+    plugin_id    VARCHAR(64)   not null,
     create_time  TIMESTAMP     not null default CURRENT_TIMESTAMP,
     update_time  TIMESTAMP     null,
     constraint PK_DOWNLOAD_TOOL_CONFIG primary key (id)
@@ -151,6 +153,9 @@ comment on column download_tool_config.save_path is
 
 comment on column download_tool_config.default_tool is
     '是否默认';
+
+comment on column download_tool_config.plugin_id is
+    '插件id';
 
 comment on column download_tool_config.create_time is
     '创建时间';

@@ -77,6 +77,12 @@ public interface DownloadToolConfig extends BaseEntity {
     @Column(name = "default_tool")
     boolean defaultTool();
 
+    /**
+     * 插件id
+     */
+    @Column(name = "plugin_id")
+    String pluginId();
+
     @ManyToMany(mappedBy = "downloadToolConfigs", orderedProps = {
             @OrderedProp("name"),
     })

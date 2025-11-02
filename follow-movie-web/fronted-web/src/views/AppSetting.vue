@@ -14,6 +14,27 @@
             </div>
           </v-card-item>
           <div class="setting-card-button">
+            <!-- 展示已配置的下载工具列表 -->
+            <div v-if="downloadToolLoading" class="text-center pa-4">
+              <v-progress-circular color="primary" indeterminate />
+            </div>
+            <v-list v-else-if="downloadToolConfigs.length > 0" bg-color="transparent" class="pa-0">
+              <v-list-item
+                v-for="config in downloadToolConfigs"
+                :key="config.id"
+                class="mb-1 rounded"
+                color="grey-3"
+                @click="() => handleEditSetting(config.id, config.pluginId)"
+              >
+                <v-list-item-title>{{ config.name }}</v-list-item-title>
+                <template #append>
+                  <v-icon icon="mdi-chevron-right" size="small" />
+                </template>
+              </v-list-item>
+            </v-list>
+            <div v-else class="text-center pa-4 text-grey">
+              暂无下载工具配置
+            </div>
             <v-btn
               block
               class=" mb-1 align-center"
@@ -181,10 +202,12 @@
 </template>
 
 <script lang="ts" setup>
+  import type { BasicDownloadToolConfig } from '@/types/download-tool-config.ts'
   import type { BasicMediaFetchConfig } from '@/types/media-fetch-config.ts'
   import type { PluginComponent } from '@/types/module-federation.ts'
   import type { BasicPreAuthConfig } from '@/types/sys-pre-auth.ts'
   import { computed, onMounted, ref } from 'vue'
+  import { queryAllDownloadToolSettings } from '@/api/download-tool-config.ts'
   import { queryAllFetcherSettings } from '@/api/media-fetch-config.ts'
   import { queryAllPreAuthSettings } from '@/api/sys-pre-auth.ts'
   import { useModuleFederation } from '@/stores/module-federation.ts'
@@ -222,6 +245,10 @@
   const preAuthConfigs = ref<BasicPreAuthConfig[]>([])
   const preAuthLoading = ref(false)
 
+  // 新增：下载工具配置列表和加载状态
+  const downloadToolConfigs = ref<BasicDownloadToolConfig[]>([])
+  const downloadToolLoading = ref(false)
+
   // 加载站点配置列表
   const loadFetcherSettings = async () => {
     loading.value = true
@@ -252,6 +279,21 @@
     }
   }
 
+  // 加载下载工具配置列表
+  const loadDownloadToolSettings = async () => {
+    downloadToolLoading.value = true
+    try {
+      const result = await queryAllDownloadToolSettings()
+      if (result.code === 10_000) {
+        downloadToolConfigs.value = result.data
+      }
+    } catch (error) {
+      console.error('加载下载工具配置失败:', error)
+    } finally {
+      downloadToolLoading.value = false
+    }
+  }
+
   // 打开弹窗
   const openSettingDialog = (setting: PluginComponent, action: 'insert' | 'update', id?: number) => {
     currentSetting.value = setting
@@ -267,6 +309,7 @@
     // 重新加载列表
     loadFetcherSettings()
     loadPreAuthSettings()
+    loadDownloadToolSettings()
   }
 
   // 编辑配置
@@ -285,6 +328,7 @@
   onMounted(() => {
     loadFetcherSettings()
     loadPreAuthSettings()
+    loadDownloadToolSettings()
   })
 </script>
 
