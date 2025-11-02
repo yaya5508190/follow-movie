@@ -28,6 +28,14 @@ export default function setup () {
           component: 'remote/App-Setting',
           desc: '',
         },
+        {
+          pluginId: '0fb0cde6-545c-4172-82b8-d2404dbbfb51',
+          type: 'preAuthSetting',
+          meta: '极空间',
+          componentName: 'App-Setting',
+          component: 'remote/App-Setting',
+          desc: '',
+        },
       ],
     } satisfies MFConfig
   })
