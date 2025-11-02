@@ -15,6 +15,7 @@ const closeSettingDialog = () => {
 //定义props action，支持 insert 或 update
 const props = defineProps<{
   action: 'insert' | 'update'
+  id?: number
 }>()
 
 // 根据 action 显示不同的标题
@@ -63,10 +64,10 @@ const rules = {
 const loading = ref(false)
 
 // 获取设置
-const getSetting = async () => {
+const getSetting = async (id: number) => {
   try {
     loading.value = true
-    const response = await axiosInstance.post('/api/mediaResource/getSetting')
+    const response = await axiosInstance.post(`/api/mediaResource/getSetting/${id}`)
 
     if (response.data.code === 10000 && response.data.data) {
       const data = response.data.data
@@ -94,7 +95,7 @@ const getSetting = async () => {
 // 组件挂载时，如果是更新模式则获取配置
 onMounted(() => {
   if (props.action === 'update') {
-    getSetting()
+    getSetting(props.id)
   }
 })
 
