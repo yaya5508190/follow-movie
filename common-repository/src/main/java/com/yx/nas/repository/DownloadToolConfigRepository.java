@@ -1,9 +1,7 @@
 package com.yx.nas.repository;
 
 import com.yx.nas.dto.DownloadToolConfigView;
-import com.yx.nas.entity.DownloadToolConfig;
-import com.yx.nas.entity.DownloadToolConfigFetcher;
-import com.yx.nas.entity.DownloadToolConfigTable;
+import com.yx.nas.entity.*;
 import org.babyfish.jimmer.spring.repo.support.AbstractJavaRepository;
 import org.babyfish.jimmer.sql.JSqlClient;
 import org.springframework.stereotype.Repository;
@@ -34,7 +32,11 @@ public class DownloadToolConfigRepository extends AbstractJavaRepository<Downloa
                 .createQuery(table)
                 .where(table.id().eq(id))
                 .where(table.type().eq(type))
-                .select(table.fetch(DownloadToolConfigFetcher.$.allScalarFields()))
+                .select(table.fetch(DownloadToolConfigFetcher
+                        .$
+                        .allScalarFields()
+                        .sysPreAuth(SysPreAuthFetcher.$.allScalarFields()))
+                )
                 .fetchFirstOrNull();
     }
 

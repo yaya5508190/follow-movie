@@ -4,6 +4,7 @@ import com.yx.nas.entity.DownloadToolConfig;
 import com.yx.nas.repository.DownloadToolConfigRepository;
 import com.yx.nas.tool.plugins.MediaDownloadPluginConfig;
 import com.yx.nas.tool.plugins.common.service.CommonService;
+import com.yx.nas.tool.plugins.enums.CredentialTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Service;
@@ -39,16 +40,29 @@ public class QBittorrentService {
         try {
             log.info("尝试登录 qBittorrent: {}", config.url());
 
+            String preAuthCookie = "";
+            // 如果预认证不为空且类型为cookie则将cookie合并
+            if (!Objects.isNull(config.sysPreAuth())
+                    && CredentialTypeEnum.COOKIE.getCode() == Objects.requireNonNull(config.sysPreAuth()).credentialType()) {
+                preAuthCookie = Objects.requireNonNull(config.sysPreAuth()).credential();
+            }
+
             // 构建表单数据
             RequestBody formBody = new FormBody.Builder()
                     .add("username", Objects.requireNonNull(config.username()))
                     .add("password", Objects.requireNonNull(config.password()))
                     .build();
 
-            Request request = new Request.Builder()
+            Request.Builder requestBuilder = new Request.Builder()
                     .url(config.url() + "/api/v2/auth/login")
-                    .post(formBody)
-                    .build();
+                    .post(formBody);
+
+            // 如果预认证cookie存在，则在登录请求中使用
+            if (StringUtils.hasText(preAuthCookie)) {
+                requestBuilder.addHeader("Cookie", preAuthCookie);
+            }
+
+            Request request = requestBuilder.build();
 
             try (Response response = okHttpClient.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
@@ -60,6 +74,9 @@ public class QBittorrentService {
                 String setCookie = response.header("Set-Cookie");
                 if (StringUtils.hasText(setCookie)) {
                     this.cookie = setCookie.split(";")[0];
+                    if (StringUtils.hasText(preAuthCookie)) {
+                        this.cookie = preAuthCookie + "; " + this.cookie;
+                    }
                     log.info("qBittorrent 登录成功");
                     return true;
                 } else {
