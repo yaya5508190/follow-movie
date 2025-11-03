@@ -62,6 +62,8 @@ export interface DownloadToolConfigInput {
   mediaFetchConfigIds?: number[]
   /** 关联的预认证配置 ID */
   sysPreAuthId?: number
+  /** 插件id */
+  pluginId: string
 }
 
 /**
@@ -96,4 +98,6 @@ export interface DownloadToolConfigView {
   mediaFetchConfigs?: MediaFetchConfigSimple[]
   /** 关联的预认证配置 */
   sysPreAuth?: SysPreAuthSimple
+  /** 插件id */
+  pluginId: string
 }

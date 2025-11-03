@@ -51,7 +51,8 @@ const formData = ref<DownloadToolConfigInput>({
   savePath: '/downloads',
   defaultTool: false,
   mediaFetchConfigIds: [],
-  sysPreAuthId: undefined
+  sysPreAuthId: undefined,
+  pluginId: "",
 })
 
 // 表单校验规则
