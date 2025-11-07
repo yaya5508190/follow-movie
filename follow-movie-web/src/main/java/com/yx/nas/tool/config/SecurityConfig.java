@@ -54,9 +54,18 @@ public class SecurityConfig {
                 // 配置授权规则
                 .authorizeHttpRequests(authorize -> authorize
                         // 允许登录接口匿名访问
-                        .requestMatchers("/api/auth/login", "/api/auth/logout").permitAll()
-                        // 允许静态资源访问
-                        .requestMatchers("/static/**", "/public/**").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/logout","/api/plugin/module-federation").permitAll()
+                        // 可以访问/
+                        .requestMatchers( "/", "/index.html").permitAll()
+                        .requestMatchers(request -> {
+                            String uri = request.getRequestURI();
+                            return uri.endsWith(".js") || uri.endsWith(".css") ||
+                                    uri.endsWith(".ico") || uri.endsWith(".png") ||
+                                    uri.endsWith(".jpg") || uri.endsWith(".jpeg") ||
+                                    uri.endsWith(".svg") || uri.endsWith(".woff") ||
+                                    uri.endsWith(".woff2") || uri.endsWith(".ttf") ||
+                                    uri.endsWith(".json");
+                        }).permitAll()
                         // 其他所有请求都需要认证
                         .anyRequest().authenticated()
                 )

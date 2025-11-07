@@ -3,6 +3,7 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import RemoteRoot from './remote-root.vue'
+import { setAppConfig } from '@/config/app-config'
 
 let app: ReturnType<typeof createApp> | null = null
 
@@ -30,3 +31,6 @@ export function unmount () {
     app = null
   }
 }
+
+// 导出配置函数，供主项目使用
+export { setAppConfig }
