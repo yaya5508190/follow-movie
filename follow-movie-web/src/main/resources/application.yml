@@ -6,6 +6,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/follow_movie
     username: postgres
     password: 123
+  session:
+    timeout: 30m
 plugin:
   path: C:\develop\x-project\follow-movie\plugins\media-hub\target
   scan: true

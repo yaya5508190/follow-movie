@@ -1,0 +1,17 @@
+export com.yx.nas.entity.SysUser
+    -> package com.yx.nas.dto
+
+input SysUserInput {
+    #allScalars(SysUser)
+    -id
+}
+
+SysUserView {
+    #allScalars(this)
+    -password
+}
+
+SysUserDetailView {
+    #allScalars(this)
+}
+

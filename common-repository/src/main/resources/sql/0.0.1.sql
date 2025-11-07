@@ -198,10 +198,6 @@ drop table if exists sys_pre_auth;
 /*==============================================================*/
 /* Table: sys_pre_auth                                          */
 /*==============================================================*/
-
-/*==============================================================*/
-/* Table: sys_pre_auth                                          */
-/*==============================================================*/
 create table sys_pre_auth
 (
     id              BIGSERIAL     not null,
@@ -269,3 +265,44 @@ create unique index u_idx_pre_auth_download on pre_auth_download_rel (
     pre_auth_id,
     download_tool_id
 );
+
+drop table if exists sys_user;
+
+/*==============================================================*/
+/* Table: sys_user                                              */
+/*==============================================================*/
+create table sys_user
+(
+    id          BIGSERIAL    not null,
+    username    VARCHAR(100) not null,
+    password    VARCHAR(255) not null,
+    nickname    VARCHAR(100) null,
+    email       VARCHAR(100) null,
+    enabled     BOOLEAN      not null,
+    create_time TIMESTAMP    not null default CURRENT_TIMESTAMP,
+    update_time TIMESTAMP    null
+);
+
+comment on table sys_user is
+    '系统用户';
+
+comment on column sys_user.username is
+    '用户名';
+
+comment on column sys_user.password is
+    '密码';
+
+comment on column sys_user.nickname is
+    '昵称';
+
+comment on column sys_user.email is
+    '邮箱';
+
+comment on column sys_user.enabled is
+    '启用状态 0 禁用 1启用';
+
+comment on column sys_user.create_time is
+    '创建时间';
+
+comment on column sys_user.update_time is
+    '更新时间';
