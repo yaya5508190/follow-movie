@@ -70,6 +70,7 @@ export default defineConfig({
       shared: {
         vue: { singleton: true, requiredVersion: '^3.4.0' },
       },
+      runtimePlugins: ['./src/plugins/module-federation-runtime-plugin.ts'],
     }),
   ],
   optimizeDeps: {

@@ -14,6 +14,7 @@
   "dependencies": {
     "@fontsource/roboto": "5.2.6",
     "@mdi/font": "7.4.47",
+    "@module-federation/enhanced": "^0.21.3",
     "@module-federation/vite": "^1.7.1",
     "axios": "^1.7.9",
     "mitt": "^3.0.1",
