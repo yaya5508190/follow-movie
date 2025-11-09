@@ -6,7 +6,9 @@
 
 import { setupLayouts } from 'virtual:generated-layouts'
 // Composables
+/* eslint-disable import/no-duplicates */
 import { createRouter, createWebHashHistory } from 'vue-router/auto'
+/* eslint-disable import/no-duplicates */
 import { routes } from 'vue-router/auto-routes'
 import { registerPluginRoutes } from '@/router/register-plugin-routes.ts'
 import { useAuthStore } from '@/stores/auth'

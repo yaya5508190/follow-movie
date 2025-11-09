@@ -1,9 +1,9 @@
 create database follow_movie;
-drop table if exists media_fetch_config;
 
 /*==============================================================*/
 /* Table: media_fetch_config                                    */
 /*==============================================================*/
+drop table if exists media_fetch_config;
 create table media_fetch_config
 (
     id             BIGSERIAL     not null,
@@ -66,6 +66,7 @@ create unique index u_plugin_id on media_fetch_config (auth_type, plugin_id);
 /*==============================================================*/
 /* Table: media_torrent_record                                  */
 /*==============================================================*/
+drop table if exists media_torrent_record;
 create table media_torrent_record
 (
     id             BIGSERIAL    not null,
@@ -98,14 +99,10 @@ comment on column media_torrent_record.update_time is
 /*==============================================================*/
 create unique index u_idx_resource_fetcher on media_torrent_record (resource_id, fetcher_source);
 
-drop index if exists u_idx_name;
-
-drop table if exists download_tool_config;
-
-
 /*==============================================================*/
 /* Table: download_tool_config                                  */
 /*==============================================================*/
+drop table if exists download_tool_config;
 create table download_tool_config
 (
     id           BIGSERIAL     not null,
@@ -168,20 +165,10 @@ comment on column download_tool_config.update_time is
 /*==============================================================*/
 create unique index u_idx_name on download_tool_config (name);
 
-
-/*==============================================================*/
-/* Index: u_idx_name                                            */
-/*==============================================================*/
-create unique index u_idx_name on download_tool_config (name);
-
-
-drop index if exists u_idx_media_fetch_download;
-
-drop table if exists media_fetch_download_rel;
-
 /*==============================================================*/
 /* Table: media_fetch_download_rel                              */
 /*==============================================================*/
+drop table if exists media_fetch_download_rel;
 create table media_fetch_download_rel
 (
     media_fetch_id   BIGSERIAL not null,
@@ -193,15 +180,14 @@ create table media_fetch_download_rel
 /*==============================================================*/
 create unique index u_idx_media_fetch_download on media_fetch_download_rel (media_fetch_id, download_tool_id);
 
-drop table if exists sys_pre_auth;
-
 /*==============================================================*/
 /* Table: sys_pre_auth                                          */
 /*==============================================================*/
+drop table if exists sys_pre_auth;
 create table sys_pre_auth
 (
     id              BIGSERIAL     not null,
-    auth_name       VARCHAR(255)  null,
+    auth_name       VARCHAR(255)  not null,
     auth_url        VARCHAR(255)  null,
     user_name       VARCHAR(150)  null,
     password        VARCHAR(150)  null,
@@ -245,13 +231,10 @@ comment on column sys_pre_auth.create_time is
 comment on column sys_pre_auth.update_time is
     '更新时间';
 
-drop index if exists u_idx_pre_auth_download;
-
-drop table if exists  pre_auth_download_rel;
-
 /*==============================================================*/
 /* Table: pre_auth_download_rel                                 */
 /*==============================================================*/
+drop table if exists  pre_auth_download_rel;
 create table pre_auth_download_rel
 (
     pre_auth_id      BIGSERIAL not null,
@@ -266,11 +249,10 @@ create unique index u_idx_pre_auth_download on pre_auth_download_rel (
     download_tool_id
 );
 
-drop table if exists sys_user;
-
 /*==============================================================*/
 /* Table: sys_user                                              */
 /*==============================================================*/
+drop table if exists sys_user;
 create table sys_user
 (
     id          BIGSERIAL    not null,
@@ -306,3 +288,7 @@ comment on column sys_user.create_time is
 
 comment on column sys_user.update_time is
     '更新时间';
+
+-- 密码 12345678
+INSERT INTO sys_user (id, username, password, nickname, email, enabled, create_time, update_time)
+VALUES (1, 'admin', '$2a$10$oTiwkvLHQNNcGfacvOQVK./UzhB0y/BinCED2tEMH0.hWGvXvaRWe', '管理员', null, true, '2025-11-05 22:27:33.000000', '2025-11-05 22:27:34.000000');

@@ -70,7 +70,7 @@ public interface MediaFetchConfig extends BaseEntity {
      */
     @Column(name = "auth_type")
     @Key
-    Integer authType();
+    int authType();
 
     /**
      * 来源站点
