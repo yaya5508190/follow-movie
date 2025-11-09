@@ -639,7 +639,7 @@ docker-compose exec -T postgres psql -U postgres follow_movie < backup.sql
 cd follow-movie-web/fronted-web
 npm install
 
-cd ../../plugins/media-hub/fronted-web
+cd plugins/media-hub/fronted-web
 npm install
 
 # 对其他前端项目重复此操作
@@ -667,28 +667,14 @@ mvn clean package -Dmaven.test.skip=true
 
 ```bash
 # 检查 target 目录
-dir follow-movie-web\target
+dir follow-movie-web/target
 
 # 手动执行 Maven 构建
 cd follow-movie-web
 mvn clean package -Dmaven.test.skip=true
 ```
 
-### 问题 4: Docker 构建失败 - 镜像不存在
-
-**错误信息:**
-
-```
-ERROR [internal] load metadata for docker.io/library/openjdk:17-jdk-slim
-```
-
-**原因:** `openjdk:17-jdk-slim` 镜像已废弃
-
-**解决方法:**
-
-Dockerfile 已更新为使用 `eclipse-temurin:17-jdk-alpine`，重新执行打包脚本即可。
-
-### 问题 5: SQL 脚本未执行
+### 问题 4: SQL 脚本未执行
 
 **原因:** 数据库已存在，PostgreSQL 只在首次启动时执行初始化脚本
 
@@ -703,7 +689,7 @@ docker-compose up -d
 docker-compose logs -f postgres
 ```
 
-### 问题 6: 容器无法访问数据库
+### 问题 5: 容器无法访问数据库
 
 **错误信息:**
 
@@ -711,17 +697,18 @@ docker-compose logs -f postgres
 java.net.UnknownHostException: dev-postgres
 ```
 
-**原因:** 容器不在同一 Docker 网络中
+**原因:** 容器不在同一 Docker 网络中，或者都在默认的 bridge 网络中，不可以使用容器名访问
 
 **解决方法:**
 
 使用 Docker Compose 启动，它会自动创建自定义网络并将容器加入：
+或者创建自定义网络：
 
 ```bash
 docker-compose up -d
 ```
 
-### 问题 7: 端口被占用
+### 问题 6: 端口被占用
 
 **错误信息:**
 
