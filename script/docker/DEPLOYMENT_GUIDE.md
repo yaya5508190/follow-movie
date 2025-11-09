@@ -28,39 +28,21 @@
 
 ### 一键打包并部署
 
-**Windows 用户:**
-
 ```bash
 # 1. 执行打包脚本
-cd C:\develop\x-project\follow-movie\script\docker
-build-docker.bat
+cd follow-movie/script/docker
+build-docker.mjs
 
 # 2. 构建并启动服务
-cd dist
+cd 
+# 单独构建镜像
 docker build -t follow-movie:latest .
+# 直接启动服务
 docker-compose up -d
 
 # 3. 访问应用
-# 浏览器打开: http://localhost:8080
-# 默认用户名: admin, 密码: 12345678
-```
-
-**Linux/Mac 用户:**
-
-```bash
-# 1. 执行打包脚本
-cd /path/to/follow-movie/script/docker
-chmod +x build-docker.sh
-./build-docker.sh
-
-# 2. 构建并启动服务
-cd dist
-docker build -t follow-movie:latest .
-docker-compose up -d
-
-# 3. 访问应用
-# 浏览器打开: http://localhost:8080
-# 默认用户名: admin, 密码: 12345678
+浏览器打开: http://localhost:8080
+默认用户名: admin, 密码: 12345678
 ```
 
 ---
