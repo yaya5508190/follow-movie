@@ -1,0 +1,11 @@
+# 忽略构建输出目录
+dist/
+
+# 忽略临时文件
+*.tmp
+*.log
+
+# 忽略操作系统文件
+.DS_Store
+Thumbs.db
+

@@ -1,4 +1,5 @@
-create database follow_movie;
+-- Database is created by POSTGRES_DB environment variable in docker-compose.yml
+-- create database follow_movie;
 
 /*==============================================================*/
 /* Table: media_fetch_config                                    */
