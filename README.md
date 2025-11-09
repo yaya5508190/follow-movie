@@ -153,16 +153,16 @@ cd follow-movie-web/fronted-web
 npm install
 
 # 各插件前端
-cd ../../plugins/media-hub/fronted-web
+cd plugins/media-hub/fronted-web
 npm install
 
-cd ../../media-download/q-bittorrent/fronted-web
+cd plugins/media-download/q-bittorrent/fronted-web
 npm install
 
-cd ../../media-fetch/m-team/fronted-web
+cd plugins/media-fetch/m-team/fronted-web
 npm install
 
-cd ../../pre-auth/z-space/fronted-web
+cd plugins/pre-auth/z-space/fronted-web
 npm install
 ```
 
