@@ -181,6 +181,7 @@ onMounted(() => {
           v-model="formData.name"
           label="站点名称"
           required
+          density="compact"
           variant="outlined"
           class="mb-3"
           :disabled="loading"
@@ -190,6 +191,7 @@ onMounted(() => {
           v-model="formData.url"
           label="站点URL"
           required
+          density="compact"
           variant="outlined"
           class="mb-3"
           :disabled="loading"
@@ -200,6 +202,7 @@ onMounted(() => {
           v-model="formData.apiKey"
           label="API Key"
           required
+          density="compact"
           variant="outlined"
           class="mb-3"
           :disabled="loading"

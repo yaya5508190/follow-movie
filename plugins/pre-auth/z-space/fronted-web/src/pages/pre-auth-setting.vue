@@ -205,7 +205,7 @@ onMounted(() => {
               placeholder="请输入认证名称，例如：我的极空间"
               :rules="rules.authName"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -218,7 +218,7 @@ onMounted(() => {
               placeholder="请输入极空间访问地址，例如：http://192.168.1.100:5055"
               :rules="rules.authUrl"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -229,7 +229,7 @@ onMounted(() => {
               placeholder="请输入用户名"
               :rules="rules.userName"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -244,7 +244,7 @@ onMounted(() => {
               :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
               @click:append-inner="showPassword = !showPassword"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -255,7 +255,7 @@ onMounted(() => {
               label="API Key"
               placeholder="请输入API Key"
               variant="outlined"
-              density="comfortable"
+              density="compact"
             />
           </v-col>
 
@@ -265,7 +265,7 @@ onMounted(() => {
               label="凭据类型"
               :items="credentialTypeOptions"
               variant="outlined"
-              density="comfortable"
+              density="compact"
             />
           </v-col>
 
@@ -275,7 +275,7 @@ onMounted(() => {
               label="认证凭据"
               placeholder="请输入认证凭据"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               rows="3"
             />
           </v-col>

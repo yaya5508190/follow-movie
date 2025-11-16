@@ -86,16 +86,16 @@
 
     <!--    Snackbar 提示-->
     <v-snackbar
-      v-model="snackbar"
-      :color="snackbarColor"
+      v-model="snackbarStore.show"
+      :color="snackbarStore.color"
       location="top"
-      :timeout="1800"
+      :timeout="snackbarStore.timeout"
     >
-      {{ snackbarText }}
+      {{ snackbarStore.message }}
       <template #actions>
         <v-btn
           variant="text"
-          @click="snackbar = false"
+          @click="snackbarStore.hide()"
         >
           关闭
         </v-btn>
@@ -109,6 +109,7 @@
   import AggregateSearch from '@/components/AggregateSearch.vue'
   import { eventBus } from '@/plugins/event-bus.ts'
   import { useModuleFederation } from '@/stores/module-federation.ts'
+  import { useSnackbar } from '@/stores/snackbar'
 
   import '@/styles/global.scss'
 
@@ -119,6 +120,7 @@
   const searchDialogVisible = ref(false)
 
   const mfConfig = useModuleFederation().mfConfig
+  const snackbarStore = useSnackbar()
 
   // 打开搜索对话框
   const openSearchDialog = () => {
@@ -134,21 +136,15 @@
     }
   }, { immediate: true })
 
-  // Snackbar 状态
-  const snackbar = ref(false)
-  const snackbarText = ref('')
-  const snackbarColor = ref('success')
-
-  // 显示提示
-  const showMessage = (message: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') => {
-    snackbarText.value = message
-    snackbarColor.value = type
-    snackbar.value = true
-  }
-
   // 全局监听事件总线的消息提示事件
   eventBus.on('plugin:show-message', (payload: { message: string, type: 'success' | 'error' | 'warning' | 'info' }) => {
-    showMessage(payload.message, payload.type)
+    const typeMap = {
+      success: snackbarStore.showSuccess,
+      error: snackbarStore.showError,
+      warning: snackbarStore.showWarning,
+      info: snackbarStore.showInfo,
+    }
+    typeMap[payload.type]?.(payload.message)
   })
 
 </script>

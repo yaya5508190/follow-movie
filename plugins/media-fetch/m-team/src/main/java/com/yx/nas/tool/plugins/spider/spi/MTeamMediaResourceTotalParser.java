@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class MTeamMediaResourceTotalParser implements JsonBodyParser<Integer> {
+public class MTeamMediaResourceTotalParser implements JsonBodyParser<Long> {
     @Override
     public ResultProperty getResultProperty() {
         return new ResultProperty("total", DataType.SINGLE);
     }
 
     @Override
-    public List<Integer> parse(JsonNode node) throws Exception {
-        return List.of(node.get("data").get("total").asInt());
+    public List<Long> parse(JsonNode node) throws Exception {
+        return List.of(node.get("data").get("total").asLong());
     }
 
     @Override

@@ -28,6 +28,12 @@
             <artifactId>jimmer-spring-boot-starter</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.yx</groupId>
+            <artifactId>common-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

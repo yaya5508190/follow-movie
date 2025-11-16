@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Component
-public class DouBanMovieTotalParser implements JsonBodyParser<Integer> {
+public class DouBanMovieTotalParser implements JsonBodyParser<Long> {
     @Override
     public boolean supports(String url, String ct) {
         return ct != null && url != null && ct.contains("application/json") && url.contains("https://m.douban.com/rexxar/api/v2/subject/recent_hot/movie");
@@ -22,7 +22,7 @@ public class DouBanMovieTotalParser implements JsonBodyParser<Integer> {
     }
 
     @Override
-    public List<Integer> parse(JsonNode node) throws JsonProcessingException {
-        return List.of(node.get("total").asInt());
+    public List<Long> parse(JsonNode node) throws JsonProcessingException {
+        return List.of(node.get("total").asLong());
     }
 }

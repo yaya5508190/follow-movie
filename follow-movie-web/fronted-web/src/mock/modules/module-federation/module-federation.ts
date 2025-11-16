@@ -5,7 +5,7 @@ export default function setup () {
   Mock.mock('./api/plugin/module-federation', 'get', () => {
     return {
       remotes: [
-        { alias: 'remote', name: 'remote', entry: 'http://192.168.123.249:3002/mf-manifest.json' },
+        { alias: 'remote', name: 'remote', entry: 'http://192.168.123.249:3003/mf-manifest.json' },
         // { alias: 'vueViteRemote', name: 'vueViteRemote', entry: 'http://localhost:5174/remoteEntry.js' },
       ],
       menus: [

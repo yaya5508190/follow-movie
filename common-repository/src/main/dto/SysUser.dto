@@ -6,9 +6,26 @@ input SysUserInput {
     -id
 }
 
+input SysUserUpdateInput {
+    id
+    nickName
+    email
+    enabled
+    fuzzy password?
+}
+
+specification SysUserSpec {
+    like/i(userName)
+    like/i(nickName)
+    like/i(email)
+    eq(enabled)
+}
+
 SysUserView {
     #allScalars(this)
     -password
+    createTime
+    updateTime
 }
 
 SysUserDetailView {

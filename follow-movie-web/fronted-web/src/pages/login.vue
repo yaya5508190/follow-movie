@@ -76,6 +76,7 @@ meta:
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
+  import { useSnackbar } from '@/stores/snackbar'
 
   const username = ref('')
   const password = ref('')
@@ -83,6 +84,10 @@ meta:
   const loading = ref(false)
   const authStore = useAuthStore()
   const router = useRouter()
+
+  // 隐藏残留的 snackbar
+  const snackbarStore = useSnackbar();
+  snackbarStore.hide();
 
   const handleLogin = async () => {
     if (!username.value || !password.value) {

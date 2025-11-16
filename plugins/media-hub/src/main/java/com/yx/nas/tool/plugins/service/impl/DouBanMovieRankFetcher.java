@@ -57,7 +57,7 @@ public class DouBanMovieRankFetcher implements MovieRankFetcher {
         Map<String,Object> parseData = parserEngine.parse(node, url, context);
         PageResult<MovieRankDto> pageResult = new PageResult<>();
         pageResult.setRecords((List<MovieRankDto>) parseData.get("data"));
-        pageResult.setTotal((Integer) parseData.get("total"));
+        pageResult.setTotal((Long) parseData.get("total"));
         pageResult.setPageNum(movieRankPageReqVo.getPageNum());
         pageResult.setPageSize(movieRankPageReqVo.getPageSize());
         return pageResult;

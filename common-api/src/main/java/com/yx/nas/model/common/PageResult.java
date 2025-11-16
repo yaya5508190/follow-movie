@@ -24,6 +24,6 @@ public class PageResult<T> {
     /**
      * 总记录数
      */
-    private Integer total;
+    private Long total;
 
 }

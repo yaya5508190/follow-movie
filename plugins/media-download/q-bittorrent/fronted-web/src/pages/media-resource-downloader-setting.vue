@@ -231,7 +231,7 @@ onMounted(() => {
               placeholder="请输入配置名称，例如：我的Q-Bittorrent"
               :rules="rules.name"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -243,7 +243,7 @@ onMounted(() => {
               placeholder="请输入访问地址，例如：http://192.168.1.100:8080"
               :rules="rules.url"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -254,7 +254,7 @@ onMounted(() => {
               label="认证类型"
               :items="authTypeOptions"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -266,7 +266,7 @@ onMounted(() => {
               placeholder="请输入用户名"
               :rules="rules.username"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -281,7 +281,7 @@ onMounted(() => {
               :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
               @click:append-inner="showPassword = !showPassword"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -293,7 +293,7 @@ onMounted(() => {
               placeholder="请输入Cookie"
               :rules="rules.cookie"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               rows="3"
               required
             />
@@ -306,7 +306,7 @@ onMounted(() => {
               placeholder="请输入默认保存路径，例如：/downloads"
               :rules="rules.savePath"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               required
             />
           </v-col>
@@ -319,7 +319,7 @@ onMounted(() => {
               item-title="name"
               item-value="id"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               multiple
               chips
               clearable
@@ -350,7 +350,7 @@ onMounted(() => {
               item-title="authName"
               item-value="id"
               variant="outlined"
-              density="comfortable"
+              density="compact"
               clearable
               hint="选择此下载工具使用的预认证配置(可选)"
               persistent-hint
@@ -371,7 +371,7 @@ onMounted(() => {
               v-model="formData.defaultTool"
               label="设为默认下载工具"
               color="primary"
-              density="comfortable"
+              density="compact"
             />
           </v-col>
         </v-row>

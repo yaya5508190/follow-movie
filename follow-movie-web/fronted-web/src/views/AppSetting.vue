@@ -370,6 +370,7 @@
 }
 
 .dialog-with-max-height .v-card-text {
+  padding-top: 6px !important;
   overflow-y: auto !important;
   flex: 1 1 auto !important;
 }

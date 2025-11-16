@@ -80,7 +80,7 @@ public class MediaResourceFetcherImpl implements MediaResourceFetcher {
             PageResult<MediaResourceDto> pageResult = new PageResult<>();
             pageResult.setPageNum(reqVo.getPageNum());
             pageResult.setPageSize(reqVo.getPageSize());
-            pageResult.setTotal((Integer) parseData.get("total"));
+            pageResult.setTotal((Long) parseData.get("total"));
             pageResult.setRecords((List<MediaResourceDto>) parseData.get("data"));
 
             return pageResult;
