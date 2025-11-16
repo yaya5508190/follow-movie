@@ -4,15 +4,12 @@ import { loadRemote, registerRemotes } from '@module-federation/runtime'
 import { useModuleFederation } from '@/stores/module-federation.ts'
 
 export async function ensureRemotes (): Promise<ReturnType<ModuleFederation['registerRemotes']>> {
-  // [
-  //   { alias: 'viteViteRemote', name: 'viteViteRemote', entry: 'http://localhost:3001/mf-manifest.json' },
-  //   { alias:'vueViteRemote', name:'vueViteRemote', entry:'http://localhost:5174/remoteEntry.js' }
-  // ]
   const { data } = await axiosInstance.get<MFConfig>('/plugin/module-federation')
   // 追加主项目自带的菜单
   data.menus.push(
     { name: '系统管理', path: '', component: '', parent: true, children: [
       { name: '应用设置', path: '/app-setting', local: true, component: 'AppSetting', parent: false, children: [] },
+      { name: '用户管理', path: '/user-setting', local: true, component: 'UserSetting', parent: false, children: [] },
     ] },
   )
   console.log(data)

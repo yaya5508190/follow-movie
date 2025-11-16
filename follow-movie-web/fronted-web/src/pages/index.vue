@@ -9,6 +9,6 @@
   const router = useRouter()
 
   onMounted(() => {
-    router.replace('/9d220be1-8f62-4819-8f00-03911dc00a95/App')
+    //router.replace('/9d220be1-8f62-4819-8f00-03911dc00a95/App')
   })
 </script>

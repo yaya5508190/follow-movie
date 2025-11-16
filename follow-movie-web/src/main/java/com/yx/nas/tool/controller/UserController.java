@@ -19,9 +19,9 @@ import java.util.Map;
  * @date 2025-11-05
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
-public class AuthController {
+public class UserController {
 
     private final UserService userService;
 

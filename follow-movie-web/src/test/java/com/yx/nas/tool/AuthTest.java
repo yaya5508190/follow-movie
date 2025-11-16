@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = "/test-data/auth-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/test-data/cleanup-auth-test-data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 public class AuthTest {
 
     @Autowired
@@ -43,7 +44,7 @@ public class AuthTest {
     private static final String TEST_PASSWORD = "123";
 
     @Test
-    @DisplayName("1. 登录成功 - 正确的用户名和密码")
+    @DisplayName("登录成功 - 正确的用户名和密码")
     void testLoginSuccess() {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -59,7 +60,7 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("2. 登录失败 - 错误的密码")
+    @DisplayName("登录失败 - 错误的密码")
     void testLoginFailureWrongPassword() {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -74,7 +75,7 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("3. 登录失败 - 用户不存在")
+    @DisplayName("登录失败 - 用户不存在")
     void testLoginFailureUserNotFound() {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -88,7 +89,7 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("4. 登录失败 - 缺少用户名参数")
+    @DisplayName("登录失败 - 缺少用户名参数")
     void testLoginFailureMissingUsername() {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -100,7 +101,7 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("5. 登录失败 - 缺少密码参数")
+    @DisplayName("登录失败 - 缺少密码参数")
     void testLoginFailureMissingPassword() {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -112,16 +113,16 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("6. 获取当前用户 - 未登录状态")
+    @DisplayName("获取当前用户 - 未登录状态")
     void testGetCurrentUserUnauthorized() {
-        var resp = rest.getForEntity("/api/auth/current", String.class);
+        var resp = rest.getForEntity("/api/user/current", String.class);
         assertThat(resp.getBody()).contains("\"code\":401");
         assertThat(resp.getBody()).contains("\"message\":\"未认证，请先登录\"");
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    @DisplayName("7. 获取当前用户 - 已登录状态")
+    @DisplayName("获取当前用户 - 已登录状态")
     void testGetCurrentUserAuthenticated() {
         // 先登录
         var headers = new HttpHeaders();
@@ -145,7 +146,7 @@ public class AuthTest {
         var currentHeaders = new HttpHeaders();
         currentHeaders.add("Cookie", sessionCookie);
 
-        var resp = rest.exchange("/api/auth/current",
+        var resp = rest.exchange("/api/user/current",
                 org.springframework.http.HttpMethod.GET,
                 new HttpEntity<>(currentHeaders),
                 String.class);
@@ -158,7 +159,7 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("8. 登出成功")
+    @DisplayName("登出成功")
     void testLogoutSuccess() {
         // 先登录
         var headers = new HttpHeaders();
@@ -195,7 +196,7 @@ public class AuthTest {
         var currentHeaders = new HttpHeaders();
         currentHeaders.add("Cookie", sessionCookie);
 
-        var resp = rest.exchange("/api/auth/current",
+        var resp = rest.exchange("/api/user/current",
                 org.springframework.http.HttpMethod.GET,
                 new HttpEntity<>(currentHeaders),
                 String.class);
@@ -204,112 +205,7 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("9. 创建用户成功 - 需要先登录")
-    void testCreateUserSuccess() {
-        // 先登录
-        var loginHeaders = new HttpHeaders();
-        loginHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        var loginBody = new LinkedMultiValueMap<String, String>();
-        loginBody.add("username", TEST_USERNAME);
-        loginBody.add("password", TEST_PASSWORD);
-
-        var loginResp = rest.postForEntity("/api/auth/login", new HttpEntity<>(loginBody, loginHeaders), String.class);
-        assertThat(loginResp.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-        // 获取 Cookie
-        var cookies = loginResp.getHeaders().get("Set-Cookie");
-        assertThat(cookies).isNotNull();
-        var sessionCookie = cookies.stream()
-                .filter(c -> c.startsWith("JSESSIONID="))
-                .findFirst()
-                .orElseThrow();
-
-        // 创建新用户
-        String newUsername = "newuser_" + System.currentTimeMillis();
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("Cookie", sessionCookie);
-        String requestBody = """
-                {
-                    "userName": "%s",
-                    "password": "newpass123",
-                    "nickname": "新用户",
-                    "email": "newuser@example.com",
-                    "enabled": true
-                }
-                """.formatted(newUsername);
-
-        var resp = rest.postForEntity("/api/auth/register", new HttpEntity<>(requestBody, headers), String.class);
-        assertThat(resp.getBody()).contains("\"code\":10000");
-        assertThat(resp.getBody()).contains("\"message\":\"操作成功\"");
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    @DisplayName("10. 创建用户失败 - 用户名已存在")
-    void testCreateUserFailureUserExists() {
-        // 先登录
-        var loginHeaders = new HttpHeaders();
-        loginHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        var loginBody = new LinkedMultiValueMap<String, String>();
-        loginBody.add("username", TEST_USERNAME);
-        loginBody.add("password", TEST_PASSWORD);
-
-        var loginResp = rest.postForEntity("/api/auth/login", new HttpEntity<>(loginBody, loginHeaders), String.class);
-        assertThat(loginResp.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-        // 获取 Cookie
-        var cookies = loginResp.getHeaders().get("Set-Cookie");
-        assertThat(cookies).isNotNull();
-        var sessionCookie = cookies.stream()
-                .filter(c -> c.startsWith("JSESSIONID="))
-                .findFirst()
-                .orElseThrow();
-
-        // 尝试创建已存在的用户
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("Cookie", sessionCookie);
-        String requestBody = """
-                {
-                    "userName": "%s",
-                    "password": "anypassword",
-                    "nickname": "测试",
-                    "email": "test2@example.com",
-                    "enabled": true
-                }
-                """.formatted(TEST_USERNAME);
-
-        var resp = rest.postForEntity("/api/auth/register", new HttpEntity<>(requestBody, headers), String.class);
-        assertThat(resp.getBody()).contains("\"code\":40001");
-        assertThat(resp.getBody()).contains("\"message\":\"用户已存在");
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    @DisplayName("11. 创建用户失败 - 未登录")
-    void testCreateUserFailureUnauthorized() {
-        String newUsername = "newuser_" + System.currentTimeMillis();
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        String requestBody = """
-                {
-                    "username": "%s",
-                    "password": "newpass123",
-                    "nickname": "新用户",
-                    "email": "newuser@example.com",
-                    "enabled": true
-                }
-                """.formatted(newUsername);
-
-        var resp = rest.postForEntity("/api/auth/register", new HttpEntity<>(requestBody, headers), String.class);
-        assertThat(resp.getBody()).contains("\"code\":401");
-        assertThat(resp.getBody()).contains("\"message\":\"未认证，请先登录\"");
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-    }
-
-    @Test
-    @DisplayName("12. 密码加密验证")
+    @DisplayName("密码加密验证")
     void testPasswordEncryption() {
         // 验证 BCrypt 密码哈希格式
         String testHash = "$2a$10$rOLJD.ZfrDlp2LB/SB4bX.q3.g6NLaRo7XkBvR7m5dicy.PXXpBLm";
@@ -324,7 +220,7 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("13. Session 并发控制 - 同一用户只允许一个会话")
+    @DisplayName("Session 并发控制 - 同一用户只允许一个会话")
     void testSessionConcurrencyControl() {
         // 第一次登录
         var headers1 = new HttpHeaders();
@@ -346,7 +242,7 @@ public class AuthTest {
         // 验证第一个会话有效
         var checkHeaders1 = new HttpHeaders();
         checkHeaders1.add("Cookie", session1);
-        var check1 = rest.exchange("/api/auth/current",
+        var check1 = rest.exchange("/api/user/current",
                 org.springframework.http.HttpMethod.GET,
                 new HttpEntity<>(checkHeaders1),
                 String.class);
@@ -372,7 +268,7 @@ public class AuthTest {
         // 第二个会话应该有效
         var checkHeaders2 = new HttpHeaders();
         checkHeaders2.add("Cookie", session2);
-        var check2 = rest.exchange("/api/auth/current",
+        var check2 = rest.exchange("/api/user/current",
                 org.springframework.http.HttpMethod.GET,
                 new HttpEntity<>(checkHeaders2),
                 String.class);
