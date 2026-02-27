@@ -1,6 +1,5 @@
 package com.yx.nas.tool.plugins.spider.spi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yx.framework.spider.enums.DataType;
 import com.yx.framework.spider.spi.JsonBodyParser;
@@ -22,7 +21,7 @@ public class DouBanMovieTotalParser implements JsonBodyParser<Long> {
     }
 
     @Override
-    public List<Long> parse(JsonNode node) throws JsonProcessingException {
+    public List<Long> parse(JsonNode node){
         return List.of(node.get("total").asLong());
     }
 }

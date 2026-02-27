@@ -1,16 +1,10 @@
 package com.yx.nas.tool.plugins.spider.spi;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yx.framework.spider.enums.DataType;
 import com.yx.framework.spider.spi.JsonBodyParser;
-import com.yx.nas.model.dto.MediaResourceDto;
-import com.yx.nas.tool.plugins.model.dto.MTeamMediaResourceDto;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
