@@ -110,15 +110,9 @@ public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentD
             DownloadToolConfigView downloadToolConfig = downloadToolConfigRepository.findByTypeOrDefault(mediaFetchConfigId);
 
             if (downloadToolConfig != null) {
-                if (Objects.isNull(applicationContext.getParent())) {
-                    applicationContext.publishEvent(new DownloadEvent(
-                                    "m-team",
-                                    torrentRecordId,
-                                    downloadToolConfig.getType(),
-                                    downloadToolConfig.getId()
-                            )
-                    );
-                } else {
+                // 集成运行模式：parent 存在，事件发布到主 Context（由 CrossContextEventBridge 转发）
+                // 独立测试模式：parent 为 null，只需打印日志
+                if (Objects.nonNull(applicationContext.getParent())) {
                     applicationContext.getParent().publishEvent(new DownloadEvent(
                                     "m-team",
                                     torrentRecordId,
@@ -126,6 +120,9 @@ public class MediaResourceTorrentDownloaderImpl implements MediaResourceTorrentD
                                     downloadToolConfig.getId()
                             )
                     );
+                } else {
+                    log.info("独立测试模式：下载任务已创建，torrentRecordId={}, toolType={}, toolId={}",
+                            torrentRecordId, downloadToolConfig.getType(), downloadToolConfig.getId());
                 }
             } else {
                 throw new IllegalArgumentException("M-Team未找到下载器配置");
