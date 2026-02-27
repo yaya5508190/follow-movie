@@ -57,6 +57,14 @@ function changeTab() {
   movieDataCache.value[currentTab.value].pageNum = 1
 }
 
+import { PLUGIN_ID } from '@/plugins/axios'
+
+// 将豆瓣图片 URL 转换为代理 URL
+function getProxyImageUrl(coverPic: string): string {
+  if (!coverPic) return ''
+  return `/${PLUGIN_ID}/api/proxy/image?url=${encodeURIComponent(coverPic)}`
+}
+
 </script>
 
 <template>
@@ -97,7 +105,7 @@ function changeTab() {
                 sm="3"
               >
                 <MovieCard
-                  :image-url="movieInfo.coverPic"
+                  :image-url="getProxyImageUrl(movieInfo.coverPic)"
                   :name="movieInfo.title"
                   :rating="movieInfo.rating"
                   :description="movieInfo.desc"
