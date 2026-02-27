@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.yx</groupId>
         <artifactId>media-fetch</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>m-team</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>m-team</name>
     <description>m-team插件</description>
 
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.yx</groupId>
             <artifactId>x-spider-starter</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

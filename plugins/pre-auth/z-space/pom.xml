@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.yx</groupId>
         <artifactId>pre-auth</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>z-space</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>media-hub</name>
     <description>极空间远程访问预认证</description>
 
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.yx</groupId>
             <artifactId>plugin-loader-api</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.yx</groupId>

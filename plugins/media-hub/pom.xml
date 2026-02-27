@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.yx</groupId>
         <artifactId>plugins</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>media-hub</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>media-hub</name>
     <description>媒体浏览模块</description>
 
@@ -26,13 +26,13 @@
         <dependency>
             <groupId>com.yx</groupId>
             <artifactId>plugin-loader-api</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.yx</groupId>
             <artifactId>x-spider-starter</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

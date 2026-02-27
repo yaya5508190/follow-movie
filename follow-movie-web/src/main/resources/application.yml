@@ -9,7 +9,7 @@ spring:
   session:
     timeout: 30m
 plugin:
-  path: C:\develop\x-project\follow-movie\plugins\media-hub\target
+  path: C:\develop\x-project\follow-movie\script\docker\dist\plugins
   scan: true
   context-path: /
 logging:

@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.yx</groupId>
         <artifactId>media-download</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>q-bittorrent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>q-bittorrent</name>
     <description>q-bittorrent插件</description>
 

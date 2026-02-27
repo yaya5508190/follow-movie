@@ -6,10 +6,10 @@
     <parent>
         <groupId>com.yx</groupId>
         <artifactId>follow-movie</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>plugins</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>media-hub</module>
